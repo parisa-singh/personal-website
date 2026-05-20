@@ -32,8 +32,8 @@ export default function StarsBackground() {
       color: (() => {
         const r = Math.random()
         if (r > 0.6) return '#ffffff'
-        if (r > 0.3) return '#ff3b30'
-        return '#ff6b30'
+        if (r > 0.3) return '#818cf8'
+        return '#6366f1'
       })(),
     })
 
@@ -98,7 +98,7 @@ export default function StarsBackground() {
             ctx.beginPath()
             ctx.moveTo(stars[i].x, stars[i].y)
             ctx.lineTo(stars[j].x, stars[j].y)
-            ctx.strokeStyle = '#ff3b30'
+            ctx.strokeStyle = '#818cf8'
             ctx.globalAlpha = (1 - d / CONNECT_DIST) * 0.55
             ctx.lineWidth = 0.7
             ctx.stroke()

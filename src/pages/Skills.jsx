@@ -68,7 +68,7 @@ function SkillsetCard({ label, icon, desc, delay }) {
         animationFillMode: 'both',
         padding: '18px 20px',
         borderRadius: '12px',
-        background: 'rgba(20,6,4,0.6)',
+        background: 'rgba(12,14,28,0.6)',
         border: '1px solid rgba(255,255,255,0.06)',
         display: 'flex',
         alignItems: 'flex-start',
@@ -79,12 +79,12 @@ function SkillsetCard({ label, icon, desc, delay }) {
         cursor: 'default',
       }}
       onMouseEnter={e => {
-        e.currentTarget.style.borderColor = 'rgba(255,59,48,0.3)'
-        e.currentTarget.style.background = 'rgba(255,59,48,0.04)'
+        e.currentTarget.style.borderColor = 'rgba(129,140,248,0.3)'
+        e.currentTarget.style.background = 'rgba(129,140,248,0.04)'
       }}
       onMouseLeave={e => {
         e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-        e.currentTarget.style.background = 'rgba(13,13,31,0.6)'
+        e.currentTarget.style.background = 'rgba(12,14,28,0.6)'
       }}
     >
       <span style={{ fontSize: '22px', flexShrink: 0, marginTop: '1px' }}>{icon}</span>
@@ -103,7 +103,7 @@ function SkillsetCard({ label, icon, desc, delay }) {
 const CARD = {
   borderRadius: '20px',
   padding: '32px',
-  background: 'rgba(20,6,4,0.75)',
+  background: 'rgba(12,14,28,0.75)',
   border: '1px solid rgba(255,255,255,0.07)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
@@ -134,7 +134,7 @@ export default function Skills() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '24px' }}>
           {/* People & Process */}
           <div style={CARD}>
-            <span style={{ ...SECTION_LABEL, color: '#ff3b30' }}>01 / People &amp; Process</span>
+            <span style={{ ...SECTION_LABEL, color: '#818cf8' }}>01 / People &amp; Process</span>
             <h2 style={SECTION_TITLE}>Soft Skills</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '9px' }}>
               {SOFT_SKILLS.map((s, i) => <SoftCard key={s.label} {...s} delay={i * 55} />)}
@@ -143,7 +143,7 @@ export default function Skills() {
 
           {/* Tech & Tools */}
           <div style={CARD}>
-            <span style={{ ...SECTION_LABEL, color: '#ff3b30' }}>02 / Tech &amp; Tools</span>
+            <span style={{ ...SECTION_LABEL, color: '#818cf8' }}>02 / Tech &amp; Tools</span>
             <h2 style={SECTION_TITLE}>Hard Skills</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '9px' }}>
               {HARD_SKILLS.map((s, i) => <HardCard key={s.label} {...s} delay={i * 55 + 150} />)}
@@ -153,7 +153,7 @@ export default function Skills() {
 
         {/* Bottom row: full-width Skillset */}
         <div style={CARD}>
-          <span style={{ ...SECTION_LABEL, color: '#ff3b30' }}>03 / Skillset</span>
+          <span style={{ ...SECTION_LABEL, color: '#818cf8' }}>03 / Skillset</span>
           <h2 style={SECTION_TITLE}>What I Build</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
             {SKILLSET.map((s, i) => <SkillsetCard key={s.label} {...s} delay={i * 60 + 300} />)}
@@ -165,8 +165,8 @@ export default function Skills() {
           marginTop: '28px',
           padding: '20px 28px',
           borderRadius: '14px',
-          background: 'rgba(255,59,48,0.04)',
-          border: '1px solid rgba(255,59,48,0.12)',
+          background: 'rgba(129,140,248,0.04)',
+          border: '1px solid rgba(129,140,248,0.12)',
           textAlign: 'center',
         }}>
           <p style={{
@@ -176,11 +176,11 @@ export default function Skills() {
             letterSpacing: '0.2px',
             color: '#e8eaf2',
           }}>
-            <span style={{ color: '#ff3b30' }}>CS Major &amp; Business Minor</span>
-            <span style={{ color: '#4a2820', margin: '0 10px' }}>·</span>
-            <span style={{ color: '#ff3b30' }}>UMass Amherst</span>
-            <span style={{ color: '#4a2820', margin: '0 10px' }}>·</span>
-            <span style={{ color: '#ff3b30' }}>Class of &#39;28</span>
+            <span style={{ color: '#818cf8' }}>CS Major &amp; Business Minor</span>
+            <span style={{ color: '#2e3158', margin: '0 10px' }}>·</span>
+            <span style={{ color: '#818cf8' }}>UMass Amherst</span>
+            <span style={{ color: '#2e3158', margin: '0 10px' }}>·</span>
+            <span style={{ color: '#818cf8' }}>Class of &#39;28</span>
           </p>
         </div>
       </div>

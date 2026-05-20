@@ -52,11 +52,11 @@ export default function RippleBackground() {
 
         if (proximity > 0.15) {
           const g = ctx.createRadialGradient(dot.bx, dot.by, 0, dot.bx, dot.by, r * 2)
-          g.addColorStop(0, '#ff3b30')
-          g.addColorStop(1, 'rgba(255,59,48,0)')
+          g.addColorStop(0, '#818cf8')
+          g.addColorStop(1, 'rgba(129,140,248,0)')
           ctx.fillStyle = g
         } else {
-          ctx.fillStyle = '#2a0e08'
+          ctx.fillStyle = '#1a1c3a'
         }
 
         ctx.globalAlpha = Math.min(0.95, alpha)

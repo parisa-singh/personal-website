@@ -45,19 +45,19 @@ function QuickLink({ to, emoji, label, sub }) {
             gap: '14px',
             padding: '13px 18px',
             borderRadius: '12px',
-            background: isActive ? 'rgba(255,59,48,0.08)' : 'rgba(20,6,4,0.6)',
-            border: `1px solid ${isActive ? 'rgba(255,59,48,0.35)' : 'rgba(255,255,255,0.07)'}`,
+            background: isActive ? 'rgba(129,140,248,0.08)' : 'rgba(12,14,28,0.6)',
+            border: `1px solid ${isActive ? 'rgba(129,140,248,0.35)' : 'rgba(255,255,255,0.07)'}`,
             transition: 'background 0.2s, border-color 0.2s, transform 0.15s',
             cursor: 'pointer',
             backdropFilter: 'blur(8px)',
           }}
           onMouseEnter={e => {
-            e.currentTarget.style.background = 'rgba(255,59,48,0.08)'
-            e.currentTarget.style.borderColor = 'rgba(255,59,48,0.3)'
+            e.currentTarget.style.background = 'rgba(129,140,248,0.08)'
+            e.currentTarget.style.borderColor = 'rgba(129,140,248,0.3)'
             e.currentTarget.style.transform = 'translateX(4px)'
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.background = 'rgba(20,6,4,0.6)'
+            e.currentTarget.style.background = 'rgba(12,14,28,0.6)'
             e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'
             e.currentTarget.style.transform = 'translateX(0)'
           }}
@@ -71,7 +71,7 @@ function QuickLink({ to, emoji, label, sub }) {
               {sub}
             </div>
           </div>
-          <svg width="14" height="14" fill="none" stroke="#ff3b30" strokeWidth="2" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
+          <svg width="14" height="14" fill="none" stroke="#818cf8" strokeWidth="2" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </div>
@@ -105,7 +105,7 @@ export default function AboutMe() {
           <p style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: '20px',
-            color: '#ff3b30',
+            color: '#818cf8',
             marginBottom: '16px',
             letterSpacing: '1px',
             fontWeight: 500,
@@ -121,7 +121,7 @@ export default function AboutMe() {
             lineHeight: 1.0,
             letterSpacing: '-3px',
             marginBottom: '14px',
-            background: 'linear-gradient(135deg, #ff3b30 0%, #f59e0b 100%)',
+            background: 'linear-gradient(135deg, #6366f1 0%, #818cf8 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
@@ -139,7 +139,7 @@ export default function AboutMe() {
             letterSpacing: '0.1px',
           }}>
             CS Major &amp; Business Minor &nbsp;·&nbsp;{' '}
-            <span style={{ color: '#ff3b30' }}>UMass Amherst</span>
+            <span style={{ color: '#818cf8' }}>UMass Amherst</span>
             &nbsp;·&nbsp; Class of 2028
           </p>
 
@@ -197,14 +197,14 @@ export default function AboutMe() {
               position: 'absolute',
               inset: '-28px',
               borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(245,158,11,0.14) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(129,140,248,0.14) 0%, transparent 70%)',
               zIndex: 0,
             }} />
             <div style={{
               position: 'absolute',
               inset: '-3px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #ff3b30 0%, #f59e0b 100%)',
+              background: 'linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)',
               zIndex: 1,
             }} />
             <img
@@ -220,7 +220,7 @@ export default function AboutMe() {
                 objectFit: 'cover',
                 border: '5px solid #06060f',
                 display: 'block',
-                boxShadow: '0 0 80px rgba(245,158,11,0.18), 0 0 140px rgba(245,158,11,0.12)',
+                boxShadow: '0 0 80px rgba(129,140,248,0.18), 0 0 140px rgba(129,140,248,0.12)',
               }}
             />
           </div>

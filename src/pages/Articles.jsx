@@ -11,7 +11,7 @@ function SkeletonCard() {
   return (
     <div style={{
       borderRadius: '16px', overflow: 'hidden',
-      background: 'rgba(13,13,31,0.7)',
+      background: 'rgba(12,14,28,0.7)',
       border: '1px solid rgba(255,255,255,0.05)',
       display: 'flex', flexDirection: 'column',
     }}>
@@ -32,7 +32,7 @@ function ArticleCard({ article }) {
     <a href={article.link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
       <div
         style={{
-          background: 'rgba(13,13,31,0.8)',
+          background: 'rgba(12,14,28,0.8)',
           border: '1px solid rgba(255,255,255,0.06)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
@@ -45,8 +45,8 @@ function ArticleCard({ article }) {
           cursor: 'pointer',
         }}
         onMouseEnter={e => {
-          e.currentTarget.style.borderColor = 'rgba(245,158,11,0.3)'
-          e.currentTarget.style.boxShadow = '0 0 40px rgba(245,158,11,0.07)'
+          e.currentTarget.style.borderColor = 'rgba(129,140,248,0.3)'
+          e.currentTarget.style.boxShadow = '0 0 40px rgba(129,140,248,0.07)'
           e.currentTarget.style.transform = 'translateY(-4px)'
         }}
         onMouseLeave={e => {
@@ -66,7 +66,7 @@ function ArticleCard({ article }) {
         ) : (
           <div style={{
             height: '90px', flexShrink: 0,
-            background: 'linear-gradient(135deg, rgba(245,158,11,0.06), rgba(255,159,10,0.06))',
+            background: 'linear-gradient(135deg, rgba(129,140,248,0.06), rgba(99,102,241,0.06))',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             <svg width="28" height="28" fill="currentColor" style={{ color: '#2a2f4a' }} viewBox="0 0 24 24">
@@ -100,7 +100,7 @@ function ArticleCard({ article }) {
 
           <div style={{ marginTop: 'auto', paddingTop: '10px' }}>
             <span style={{
-              fontSize: '13px', color: '#f59e0b', fontWeight: 500,
+              fontSize: '13px', color: '#818cf8', fontWeight: 500,
               display: 'flex', alignItems: 'center', gap: '4px',
             }}>
               Read on Substack
@@ -136,7 +136,7 @@ export default function Articles() {
           </h1>
           <p style={{ color: '#5a6078', fontSize: '15px' }}>
             Tech, Student Life &amp; Literature — all on{' '}
-            <a href="https://substack.com/@creativecompiler77" target="_blank" rel="noopener noreferrer" style={{ color: '#f59e0b', textDecoration: 'none' }}>
+            <a href="https://substack.com/@creativecompiler77" target="_blank" rel="noopener noreferrer" style={{ color: '#818cf8', textDecoration: 'none' }}>
               Substack
             </a>
           </p>

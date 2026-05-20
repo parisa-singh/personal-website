@@ -60,7 +60,7 @@ export default function CircuitBackground() {
         progress: Math.random(),
         speed: 0.0025 + Math.random() * 0.004,
         forward: Math.random() > 0.5,
-        color: Math.random() > 0.38 ? '#ff3b30' : '#ff7040',
+        color: Math.random() > 0.38 ? '#818cf8' : '#6366f1',
         size: Math.random() * 1.4 + 1.4,
         alpha: 0.65 + Math.random() * 0.35,
       })
@@ -84,7 +84,7 @@ export default function CircuitBackground() {
         ctx.beginPath()
         ctx.moveTo(a.x, a.y)
         ctx.lineTo(b.x, b.y)
-        ctx.strokeStyle = `rgba(90,22,12,${0.3 + boost * 0.45})`
+        ctx.strokeStyle = `rgba(30,32,80,${0.3 + boost * 0.45})`
         ctx.lineWidth = 0.7 + boost * 0.8
         ctx.stroke()
       }
@@ -149,7 +149,7 @@ export default function CircuitBackground() {
         const r = n.hub ? 3.5 : 2
         if (n.glow > 0.08) {
           const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r + n.glow * 12)
-          g.addColorStop(0, `rgba(255,59,48,${n.glow * 0.55})`)
+          g.addColorStop(0, `rgba(129,140,248,${n.glow * 0.55})`)
           g.addColorStop(1, 'transparent')
           ctx.beginPath()
           ctx.arc(n.x, n.y, r + n.glow * 12, 0, Math.PI * 2)
@@ -158,7 +158,7 @@ export default function CircuitBackground() {
         }
         ctx.beginPath()
         ctx.arc(n.x, n.y, r, 0, Math.PI * 2)
-        ctx.fillStyle = n.glow > 0.25 ? '#ff3b30' : `rgba(130,40,20,${0.45 + n.glow * 0.55})`
+        ctx.fillStyle = n.glow > 0.25 ? '#818cf8' : `rgba(60,70,150,${0.45 + n.glow * 0.55})`
         ctx.globalAlpha = 0.65 + n.glow * 0.35
         ctx.fill()
         ctx.globalAlpha = 1

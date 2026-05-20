@@ -65,27 +65,27 @@ function ExperienceCard({ role, org, period, icon, tags, desc, delay }) {
         gap: '18px',
         padding: '22px 24px',
         borderRadius: '14px',
-        background: 'rgba(20,6,4,0.7)',
+        background: 'rgba(12,14,28,0.7)',
         border: '1px solid rgba(255,255,255,0.06)',
         marginBottom: '14px',
         transition: 'border-color 0.2s, background 0.2s',
         cursor: 'default',
       }}
       onMouseEnter={e => {
-        e.currentTarget.style.borderColor = 'rgba(255,59,48,0.3)'
-        e.currentTarget.style.background = 'rgba(255,59,48,0.04)'
+        e.currentTarget.style.borderColor = 'rgba(129,140,248,0.3)'
+        e.currentTarget.style.background = 'rgba(129,140,248,0.04)'
       }}
       onMouseLeave={e => {
         e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-        e.currentTarget.style.background = 'rgba(20,6,4,0.7)'
+        e.currentTarget.style.background = 'rgba(12,14,28,0.7)'
       }}
     >
       <div style={{
         width: '42px',
         height: '42px',
         borderRadius: '10px',
-        background: 'rgba(255,59,48,0.1)',
-        border: '1px solid rgba(255,59,48,0.2)',
+        background: 'rgba(129,140,248,0.1)',
+        border: '1px solid rgba(129,140,248,0.2)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -100,21 +100,21 @@ function ExperienceCard({ role, org, period, icon, tags, desc, delay }) {
             <h3 style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '16px', color: '#e8eaf2', marginBottom: '2px' }}>
               {role}
             </h3>
-            <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '14px', color: '#ff3b30', fontWeight: 500 }}>
+            <p style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: '14px', color: '#818cf8', fontWeight: 500 }}>
               {org}
             </p>
           </div>
           <span style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: '11px',
-            color: '#4a2820',
+            color: '#2e3158',
             flexShrink: 0,
             paddingTop: '2px',
           }}>
             {period}
           </span>
         </div>
-        <p style={{ fontSize: '13px', color: '#6b4035', lineHeight: 1.7, margin: '8px 0 10px' }}>
+        <p style={{ fontSize: '13px', color: '#4a5080', lineHeight: 1.7, margin: '8px 0 10px' }}>
           {desc}
         </p>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
@@ -130,7 +130,7 @@ function ExperienceCard({ role, org, period, icon, tags, desc, delay }) {
 const CARD = {
   borderRadius: '20px',
   padding: '32px',
-  background: 'rgba(20,6,4,0.75)',
+  background: 'rgba(12,14,28,0.75)',
   border: '1px solid rgba(255,255,255,0.07)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
@@ -143,7 +143,7 @@ const SECTION_LABEL = {
   textTransform: 'uppercase',
   display: 'block',
   marginBottom: '8px',
-  color: '#ff3b30',
+  color: '#818cf8',
 }
 
 const SECTION_TITLE = {
@@ -197,8 +197,8 @@ export default function Experience() {
           marginTop: '28px',
           padding: '20px 28px',
           borderRadius: '14px',
-          background: 'rgba(255,59,48,0.04)',
-          border: '1px solid rgba(255,59,48,0.12)',
+          background: 'rgba(129,140,248,0.04)',
+          border: '1px solid rgba(129,140,248,0.12)',
           textAlign: 'center',
         }}>
           <p style={{
@@ -208,11 +208,11 @@ export default function Experience() {
             letterSpacing: '0.2px',
             color: '#e8eaf2',
           }}>
-            <span style={{ color: '#ff3b30' }}>CS Major &amp; Business Minor</span>
-            <span style={{ color: '#4a2820', margin: '0 10px' }}>·</span>
-            <span style={{ color: '#ff3b30' }}>UMass Amherst</span>
-            <span style={{ color: '#4a2820', margin: '0 10px' }}>·</span>
-            <span style={{ color: '#ff3b30' }}>Class of &#39;28</span>
+            <span style={{ color: '#818cf8' }}>CS Major &amp; Business Minor</span>
+            <span style={{ color: '#2e3158', margin: '0 10px' }}>·</span>
+            <span style={{ color: '#818cf8' }}>UMass Amherst</span>
+            <span style={{ color: '#2e3158', margin: '0 10px' }}>·</span>
+            <span style={{ color: '#818cf8' }}>Class of &#39;28</span>
           </p>
         </div>
       </div>

@@ -24,7 +24,7 @@ export default function FloatBackground() {
       vx: (Math.random() - 0.5) * 0.8,
       vy: (Math.random() - 0.5) * 0.8,
       r: Math.random() * 3 + 2,
-      color: Math.random() > 0.45 ? '#ff3b30' : '#ff6b30',
+      color: Math.random() > 0.45 ? '#818cf8' : '#6366f1',
       alpha: Math.random() * 0.5 + 0.35,
       trail: [],
     })
@@ -35,7 +35,7 @@ export default function FloatBackground() {
     }
 
     const draw = () => {
-      ctx.fillStyle = 'rgba(10, 2, 0, 0.2)'
+      ctx.fillStyle = 'rgba(7, 8, 15, 0.2)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       const mx = mouseRef.current.x

@@ -47,7 +47,7 @@ function ProjectCard({ repo }) {
     const x = (e.clientX - rect.left) / rect.width - 0.5
     const y = (e.clientY - rect.top) / rect.height - 0.5
     card.style.transform = `perspective(700px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) scale(1.02)`
-    card.style.boxShadow = `${-x * 20}px ${-y * 20}px 60px rgba(255,59,48,0.08), 0 0 40px rgba(255,59,48,0.05)`
+    card.style.boxShadow = `${-x * 20}px ${-y * 20}px 60px rgba(129,140,248,0.08), 0 0 40px rgba(129,140,248,0.05)`
   }
   const onLeave = () => {
     const card = cardRef.current
@@ -62,7 +62,7 @@ function ProjectCard({ repo }) {
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{
-        background: 'rgba(20,6,4,0.85)',
+        background: 'rgba(12,14,28,0.85)',
         border: '1px solid rgba(255,255,255,0.07)',
         backdropFilter: 'blur(12px)',
         borderRadius: '20px',
@@ -75,14 +75,14 @@ function ProjectCard({ repo }) {
         cursor: 'default',
         willChange: 'transform',
       }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,59,48,0.3)' }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(129,140,248,0.3)' }}
     >
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
         <div>
           <span style={{
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: '10px',
-            color: '#4a2820',
+            color: '#2e3158',
             letterSpacing: '1.5px',
             display: 'block',
             marginBottom: '8px',
@@ -106,14 +106,14 @@ function ProjectCard({ repo }) {
             paddingTop: '22px', flexShrink: 0,
           }}>
             <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: langColor, display: 'block' }} />
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: '#6b4035' }}>
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: '#4a5080' }}>
               {repo.language}
             </span>
           </div>
         )}
       </div>
 
-      <p style={{ fontSize: '15px', color: '#6b4035', lineHeight: 1.75, flex: 1 }}>
+      <p style={{ fontSize: '15px', color: '#4a5080', lineHeight: 1.75, flex: 1 }}>
         {repo.description || 'No description provided.'}
       </p>
 
@@ -144,7 +144,7 @@ function ProjectCard({ repo }) {
       </div>
 
       {repo.stargazers_count > 0 && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#4a2820', fontSize: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#2e3158', fontSize: '12px' }}>
           <svg width="11" height="11" fill="currentColor" viewBox="0 0 24 24">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
@@ -176,7 +176,7 @@ export default function Projects() {
             My Projects
           </h1>
           {!loading && publicRepos.length > 0 && (
-            <p style={{ color: '#4a2820', fontSize: '14px', fontFamily: "'JetBrains Mono', monospace" }}>
+            <p style={{ color: '#2e3158', fontSize: '14px', fontFamily: "'JetBrains Mono', monospace" }}>
               {publicRepos.length} public repositories · live from GitHub
             </p>
           )}
@@ -195,7 +195,7 @@ export default function Projects() {
         )}
 
         {!loading && !error && publicRepos.length === 0 && (
-          <div style={{ textAlign: 'center', color: '#4a2820', padding: '48px', fontSize: '16px' }}>
+          <div style={{ textAlign: 'center', color: '#2e3158', padding: '48px', fontSize: '16px' }}>
             No public repositories found.
           </div>
         )}

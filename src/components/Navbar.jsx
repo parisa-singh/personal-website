@@ -24,7 +24,7 @@ export default function Navbar() {
       position: 'sticky',
       top: 0,
       zIndex: 50,
-      background: scrolled ? 'rgba(10,2,0,0.95)' : 'rgba(10,2,0,0.8)',
+      background: scrolled ? 'rgba(7,8,15,0.95)' : 'rgba(7,8,15,0.8)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
       borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -46,25 +46,25 @@ export default function Navbar() {
             width: '40px',
             height: '40px',
             borderRadius: '50%',
-            border: '1.5px solid rgba(255,59,48,0.5)',
-            background: 'rgba(255,59,48,0.08)',
+            border: '1.5px solid rgba(129,140,248,0.5)',
+            background: 'rgba(129,140,248,0.08)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontFamily: "'Space Grotesk', sans-serif",
             fontWeight: 700,
             fontSize: '14px',
-            color: '#ff3b30',
+            color: '#818cf8',
             letterSpacing: '0.5px',
             flexShrink: 0,
             transition: 'background 0.2s, box-shadow 0.2s',
           }}
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'rgba(255,59,48,0.15)'
-              e.currentTarget.style.boxShadow = '0 0 20px rgba(255,59,48,0.25)'
+              e.currentTarget.style.background = 'rgba(129,140,248,0.15)'
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(129,140,248,0.25)'
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'rgba(255,59,48,0.08)'
+              e.currentTarget.style.background = 'rgba(129,140,248,0.08)'
               e.currentTarget.style.boxShadow = 'none'
             }}
           >
@@ -84,7 +84,7 @@ export default function Navbar() {
             <div style={{
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: '11px',
-              color: '#8a5040',
+              color: '#5b6899',
               letterSpacing: '1.5px',
               marginTop: '2px',
               fontWeight: 500,
@@ -106,7 +106,7 @@ export default function Navbar() {
                     alignItems: 'center',
                     gap: '7px',
                     borderRadius: '10px',
-                    background: isActive ? 'rgba(255,59,48,0.08)' : 'transparent',
+                    background: isActive ? 'rgba(129,140,248,0.08)' : 'transparent',
                     transition: 'background 0.2s',
                     position: 'relative',
                     cursor: 'pointer',
@@ -117,7 +117,7 @@ export default function Navbar() {
                   <span style={{
                     fontFamily: "'JetBrains Mono', monospace",
                     fontSize: '11px',
-                    color: isActive ? '#ff3b30' : '#3d4663',
+                    color: isActive ? '#818cf8' : '#3d4663',
                     fontWeight: 500,
                     transition: 'color 0.2s',
                   }}>
@@ -141,7 +141,7 @@ export default function Navbar() {
                       right: '18px',
                       height: '2px',
                       borderRadius: '1px',
-                      background: 'linear-gradient(90deg, #ff3b30, #ff6b30)',
+                      background: 'linear-gradient(90deg, #6366f1, #818cf8)',
                     }} />
                   )}
                 </div>
@@ -177,7 +177,7 @@ export default function Navbar() {
       {menuOpen && (
         <div style={{
           borderTop: '1px solid rgba(255,255,255,0.05)',
-          background: 'rgba(10,2,0,0.98)',
+          background: 'rgba(7,8,15,0.98)',
           padding: '12px 32px 24px',
         }}>
           {NAV_LINKS.map(({ to, num, label }) => (
@@ -192,7 +192,7 @@ export default function Navbar() {
                 padding: '14px 0',
                 textDecoration: 'none',
                 borderBottom: '1px solid rgba(255,255,255,0.04)',
-                color: isActive ? '#ff3b30' : '#6b7595',
+                color: isActive ? '#818cf8' : '#6b7595',
               })}
             >
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px' }}>{num}</span>

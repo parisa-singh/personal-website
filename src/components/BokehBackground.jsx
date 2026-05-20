@@ -26,9 +26,9 @@ export default function BokehBackground() {
       alpha: Math.random() * 0.15 + 0.08,
       color: (() => {
         const p = Math.random()
-        if (p > 0.55) return '#ff3b30'
-        if (p > 0.25) return '#ff6b30'
-        return '#ff8b50'
+        if (p > 0.55) return '#818cf8'
+        if (p > 0.25) return '#6366f1'
+        return '#a78bfa'
       })(),
       pulse: Math.random() * Math.PI * 2,
       pulseSpeed: 0.006 + Math.random() * 0.01,
