@@ -10,7 +10,7 @@ import StarsBackground from '../components/StarsBackground'
 
 const LANG_COLORS = {
   JavaScript: '#f1e05a', TypeScript: '#2b7489', Python: '#3572A5',
-  Java: '#b07219', HTML: '#e34c26', CSS: '#563d7c', 'C++': '#f34b7d',
+  Java: '#b07219', HTML: '#e34c26', CSS: '#a855f7', 'C++': '#f34b7d',
   C: '#888', Go: '#00ADD8', Rust: '#dea584', Ruby: '#701516',
   Swift: '#f05138', Kotlin: '#7F52FF', Shell: '#89e051',
 }
@@ -104,9 +104,13 @@ function ProjectCard({ repo }) {
           <div style={{
             display: 'flex', alignItems: 'center', gap: '6px',
             paddingTop: '22px', flexShrink: 0,
+            background: `${langColor}18`,
+            border: `1px solid ${langColor}55`,
+            borderRadius: '999px',
+            padding: '5px 12px 5px 8px',
           }}>
-            <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: langColor, display: 'block' }} />
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: '#4a5080' }}>
+            <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: langColor, display: 'block', boxShadow: `0 0 6px ${langColor}` }} />
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: langColor }}>
               {repo.language}
             </span>
           </div>
