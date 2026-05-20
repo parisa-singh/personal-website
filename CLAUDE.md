@@ -31,14 +31,14 @@ npm run preview    # locally preview the production build
 **Styling**: Tailwind CSS v4 (CSS-first — `@import "tailwindcss"` at top of `index.css`, no `tailwind.config.js`). Custom design tokens and component classes (`.btn-cyan`, `.btn-violet`, `.skill-pill`, `.topic-tag`, `.fade-in-up`, `.page-reveal`) are defined in `index.css`, not via Tailwind utilities.
 
 **Color system**:
-- Background: `#0a0200` (warm dark)
-- Card surfaces: `rgba(20, 6, 4, 0.75–0.85)`
-- Primary accent: `#ff3b30` (red) — buttons, nav active, glows, particle colors
-- Secondary accent: `#f59e0b` (amber) — `.btn-violet` secondary buttons
-- Muted text: `#4a2820`, `#6b4035` (warm dark tones, not blue-grey)
+- Background: `#07080f` (near-black with blue tint)
+- Card surfaces: `rgba(12, 14, 28, 0.75)`
+- Primary accent: `#818cf8` (indigo) — buttons, nav active, glows, particle colors
+- Secondary accent: `#a78bfa` / `#a5b4fc` (violet) — `.btn-violet` secondary buttons
+- UI chrome: `#14163a`, `#1e2040` (dark navy, scrollbar/swiper)
 
 ## Content to Edit
 
-**Experience page** (`src/pages/Experience.jsx`): The `CLUBS` and `CAREER` arrays at the top of the file are placeholder data. Replace with actual experience from LinkedIn.
+**Experience page** (`src/pages/Experience.jsx`): The `CLUBS` and `CAREER` arrays at the top of the file contain real experience data (UMass Design Club, PIT, EyeZense, UMass IT, etc.).
 
 **Deploy flow**: `npm run deploy` is the only deploy command needed — it runs `vite build` first via `predeploy`, then pushes `dist/` to the `gh-pages` branch. The `main` branch holds source; `gh-pages` holds the built output.
