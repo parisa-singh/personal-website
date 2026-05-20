@@ -1,57 +1,56 @@
 import CircuitBackground from '../components/CircuitBackground'
 
-// Edit these arrays with your actual experience
 const CLUBS = [
   {
-    role: 'Participant',
-    org: 'HackUMass',
-    period: '2024 – Present',
-    icon: '⚡',
-    tags: ['Hackathon', 'Full-Stack', 'Team Building'],
-    desc: 'Compete in UMass Amherst\'s flagship hackathon — building full-stack projects in 36 hours alongside hundreds of student developers from across the region.',
+    role: 'Vice President',
+    org: 'UMass Design Club',
+    period: 'Jan 2025 – May 2026',
+    icon: '🎨',
+    tags: ['UI/UX Design', 'Event Planning', 'Leadership', 'Operations'],
+    desc: 'Progressed from Event Coordinator to Vice President on the Executive Board. Lead cross-functional initiatives, oversee event logistics and space reservations, and manage budget coordination — fostering a human-centered design community on campus.',
   },
   {
-    role: 'Member',
-    org: 'Women in Computer Science (WiCS)',
-    period: '2024 – Present',
-    icon: '🌟',
-    tags: ['Community', 'Networking', 'Mentorship'],
-    desc: 'Engage with a community of women and allies in tech through industry speaker panels, technical workshops, and peer mentorship programs.',
-  },
-  {
-    role: 'Member',
-    org: 'UMass AI Club',
-    period: '2024 – Present',
-    icon: '🤖',
-    tags: ['Machine Learning', 'AI Research', 'Projects'],
-    desc: 'Explore cutting-edge AI/ML topics through project-based learning, paper readings, and collaboration with fellow ML enthusiasts.',
-  },
-  {
-    role: 'Member',
-    org: 'UMass Entrepreneurship Club',
-    period: '2024 – Present',
-    icon: '🚀',
-    tags: ['Startups', 'Business', 'Pitch Competitions'],
-    desc: 'Bridge tech and business through founder talks, pitch competitions, and workshops on venture creation and product-market fit.',
+    role: 'Marketing Coordinator',
+    org: 'UMass Public Interest Technology (PIT)',
+    period: 'Sep 2025 – May 2026',
+    icon: '💡',
+    tags: ['Marketing', 'Brand Development', 'Community', 'Social Media'],
+    desc: 'On the Executive Board of UMass PIT. Lead campus marketing and digital presence — designing flyers, running campaigns, and managing external partner communications to grow the club\'s brand and event reach.',
   },
 ]
 
 const CAREER = [
   {
-    role: 'Course Assistant',
-    org: 'UMass Amherst — CS Department',
-    period: 'Spring 2025 – Present',
-    icon: '🎓',
-    tags: ['Teaching', 'CS Education', 'Python'],
-    desc: 'Support students in introductory CS coursework — holding office hours, explaining data structures and algorithms, and providing code review feedback.',
+    role: 'Software Engineer Intern',
+    org: 'EyeZense Inc.',
+    period: 'May 2026 – Present',
+    icon: '⚡',
+    tags: ['Edge Computing', 'AI Alerting', 'Distributed Systems', 'Cloud'],
+    desc: 'Building the Edge Device Management (EDM) platform at a hybrid internship in Sunnyvale, CA. Working on device health monitoring, AI-driven anomaly detection, and intelligent alert filtering for distributed edge systems integrated with cloud backends.',
   },
   {
-    role: 'Tech Volunteer',
-    org: 'Community Digital Literacy Program',
-    period: 'Summer 2024',
-    icon: '🤝',
-    tags: ['Tech for Good', 'Teaching', 'Accessibility'],
-    desc: 'Volunteered to teach digital literacy and foundational programming concepts to community members, bridging the technology access gap.',
+    role: 'IT Consultant I → II',
+    org: 'UMass Amherst Information Technology',
+    period: 'Apr 2025 – May 2026',
+    icon: '🖥️',
+    tags: ['Technical Support', 'IT Service Management', 'Mentoring'],
+    desc: 'Promoted from Consultant I to II at the UMass IT Service Desk. Provide advanced hardware, software, and network support across campus; mentor junior consultants; and manage account provisioning and MFA resets for students, faculty, and staff.',
+  },
+  {
+    role: 'Tools Development Intern',
+    org: 'WILLSMEET',
+    period: 'Jun – Jul 2023',
+    icon: '📊',
+    tags: ['Python', 'Data Analysis', 'Procurement Modeling', 'B2B'],
+    desc: 'Developed a Python-based procurement modeling tool enabling customers to predict real-time needs and place orders on a B2B platform. Analyzed and processed multi-format data to generate insights supporting operational decision-making.',
+  },
+  {
+    role: 'Design Intern',
+    org: 'Incubex',
+    period: 'Jun – Jul 2022',
+    icon: '✏️',
+    tags: ['AutoCAD', 'SketchUp', '3D Modeling', 'Space Design'],
+    desc: 'Designed floor plans and layouts using AutoCAD, Floor Plan Creator, and SketchUp to optimize co-working spaces at a Bengaluru-based firm. Collaborated with senior designers on 2D and 3D projects spanning space management and interior design.',
   },
 ]
 
@@ -185,8 +184,8 @@ export default function Experience() {
 
           {/* Career */}
           <div style={CARD}>
-            <span style={SECTION_LABEL}>02 / Tech Experience</span>
-            <h2 style={SECTION_TITLE}>Internships &amp; Volunteer Work</h2>
+            <span style={SECTION_LABEL}>02 / Professional</span>
+            <h2 style={SECTION_TITLE}>Internships &amp; Work</h2>
             {CAREER.map((c, i) => (
               <ExperienceCard key={c.org} {...c} delay={i * 70 + 150} />
             ))}
