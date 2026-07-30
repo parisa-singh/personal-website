@@ -1,197 +1,199 @@
 import { NavLink } from 'react-router-dom'
-import Background from '../components/Background'
+import { useMemo } from 'react'
+import { useReveal } from '../hooks/useReveal'
+import { useGitHubRepos } from '../hooks/useGitHubRepos'
+import { useSubstackFeed } from '../hooks/useSubstackFeed'
+import { curateRepos, ABOUT_PROJECTS } from '../data/projects'
+import { EXPERIENCE } from '../data/experience'
 
 const PROFILE_IMG = `${import.meta.env.BASE_URL}avatar.JPEG`
-const RESUME_URL = 'https://drive.google.com/file/d/1lIrF5fA7tJJ1c-Dzn06On99H8tWSh_ta/view?usp=sharing'
 const FALLBACK_IMG = 'https://avatars.githubusercontent.com/parisa-singh'
+const RESUME_URL = 'https://drive.google.com/file/d/1lIrF5fA7tJJ1c-Dzn06On99H8tWSh_ta/view?usp=sharing'
+const LINKEDIN = 'https://www.linkedin.com/in/parisa-singh/'
+const GITHUB = 'https://github.com/parisa-singh'
 
-const BIO = `I'm an Honors Computer Science student at UMass Amherst who builds software that people actually use. My work spans AI/machine learning, full-stack development, and UI/UX design — and I care most about the point where thoughtful engineering meets real-world impact.`
+const FOCUS = ['Frontend Engineering', 'AI Integration', 'UI / UX', 'Cloud Computing', 'Product Development']
+// labels must match the Skills page exactly so the halo can find them
+const CORE_SKILLS = ['Python', 'JavaScript', 'React', 'Figma', 'Machine Learning', 'Web Development', 'UI / UX Design', 'Data Science']
 
-const BIO_2 = `Currently a Software Engineer Intern at EyeZense, where I work on distributed edge systems and AI-driven monitoring.`
+const fmt = (name) => name.replace(/[-_]/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
+const fmtDate = (s) => { const d = new Date(s); return isNaN(d) ? '' : d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) }
+const enc = encodeURIComponent
 
-const QUICK_LINKS = [
-  {
-    to: '/experience',
-    label: 'Experience',
-    sub: 'Internships, leadership & work',
-    icon: (
-      <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
-        <rect x="2" y="7" width="20" height="14" rx="2" /><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-      </svg>
-    ),
-  },
-  {
-    to: '/projects',
-    label: 'Projects',
-    sub: 'What I\'ve built, live from GitHub',
-    icon: (
-      <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
-        <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
-      </svg>
-    ),
-  },
-  {
-    to: '/skills',
-    label: 'Skills',
-    sub: 'Languages, tools & focus areas',
-    icon: (
-      <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.7" viewBox="0 0 24 24">
-        <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6a2 2 0 0 0 2.8 2.8l6-6a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.1-2.1 2.6-2.6z" />
-      </svg>
-    ),
-  },
-]
-
-function QuickLink({ to, icon, label, sub }) {
+function Stat({ label, children }) {
   return (
-    <NavLink to={to} style={{ textDecoration: 'none' }}>
-      <div
-        className="quick-link"
-        style={{
-          display: 'flex', alignItems: 'center', gap: '14px',
-          padding: '14px 18px', borderRadius: '12px',
-          background: 'var(--surface-2)', border: '1px solid var(--border)',
-          transition: 'background 0.2s, border-color 0.2s, transform 0.15s',
-          cursor: 'pointer',
-        }}
-        onMouseEnter={e => {
-          e.currentTarget.style.background = 'var(--accent-tint-soft)'
-          e.currentTarget.style.borderColor = 'var(--accent-border)'
-          e.currentTarget.style.transform = 'translateX(4px)'
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.background = 'var(--surface-2)'
-          e.currentTarget.style.borderColor = 'var(--border)'
-          e.currentTarget.style.transform = 'translateX(0)'
-        }}
-      >
-        <span style={{ color: 'var(--accent-contrast)', flexShrink: 0, display: 'flex' }}>{icon}</span>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: '14px', color: 'var(--text)' }}>
-            {label}
-          </div>
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: 'var(--text-faint)', marginTop: '2px' }}>
-            {sub}
-          </div>
-        </div>
-        <svg width="14" height="14" fill="none" stroke="var(--accent-contrast)" strokeWidth="2" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
-          <path d="M5 12h14M12 5l7 7-7 7" />
-        </svg>
+    <div style={{ flexShrink: 0 }}>
+      <div className="mono" style={{ fontSize: '11px', letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--mut)', marginBottom: '6px' }}>{label}</div>
+      <div style={{ fontFamily: 'var(--display)', fontSize: '16px', whiteSpace: 'nowrap' }}>{children}</div>
+    </div>
+  )
+}
+
+function Panel({ title, to, children }) {
+  return (
+    <div className="ov-panel reveal">
+      <div className="ov-head">
+        <h3>{title}</h3>
+        <NavLink to={to} className="ov-all">All <span className="ar">↗</span></NavLink>
       </div>
-    </NavLink>
+      {children}
+    </div>
   )
 }
 
 export default function AboutMe() {
+  const { repos } = useGitHubRepos()
+  const { articles } = useSubstackFeed()
+
+  const recentExp = useMemo(() => [...EXPERIENCE].sort((a, b) => b.start.localeCompare(a.start)).slice(0, 3), [])
+  const recentProjects = useMemo(() => {
+    const curated = curateRepos(repos)
+    if (ABOUT_PROJECTS.length) {
+      const byName = Object.fromEntries(curated.map((r) => [r.name, r]))
+      return ABOUT_PROJECTS.map((n) => byName[n]).filter(Boolean)
+    }
+    return curated.slice(0, 3)
+  }, [repos])
+  const recentArticles = articles.slice(0, 3)
+
+  useReveal([repos.length, articles.length])
+
   return (
-    <section className="page" style={{ display: 'flex', alignItems: 'center' }}>
-      <Background variant="about" />
+    <section className="page">
+      <div className="container">
+        {/* ---------- hero ---------- */}
+        <p className="kicker reveal in">
+          UMass Amherst&nbsp; · &nbsp;Honors&nbsp; · &nbsp;Class of &rsquo;28
+        </p>
 
-      <div className="container about-hero">
-        {/* Left: text */}
-        <div className="about-text">
-          <p style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: '13px',
-            color: 'var(--accent-contrast)', marginBottom: '18px', letterSpacing: '1.5px',
-            fontWeight: 500, textTransform: 'uppercase',
-          }}>
-            Software Engineer · CS @ UMass Amherst
-          </p>
-
-          <h1 style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontSize: 'clamp(42px, 7vw, 76px)', fontWeight: 700,
-            lineHeight: 1.02, letterSpacing: '-2.5px', paddingBottom: '6px', marginBottom: '10px',
-            background: 'linear-gradient(135deg, var(--grad-1) 0%, var(--grad-2) 100%)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-          }}>
-            Parisa Singh
-          </h1>
-
-          <p style={{
-            fontFamily: "'Space Grotesk', sans-serif", fontSize: '15px',
-            color: 'var(--text-dim)', fontWeight: 500, marginBottom: '26px',
-          }}>
-            B.S. Computer Science (Honors), Business Minor
-            <span style={{ color: 'var(--text-ghost)', margin: '0 8px' }}>·</span>
-            Class of 2028
-          </p>
-
-          <p style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--text-muted)', marginBottom: '14px' }}>
-            {BIO}
-          </p>
-          <p style={{ fontSize: '15px', lineHeight: 1.8, color: 'var(--text-muted)', marginBottom: '30px' }}>
-            {BIO_2}
-          </p>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '30px' }}>
-            {QUICK_LINKS.map(ql => <QuickLink key={ql.to} {...ql} />)}
+        <div className="about-grid">
+          <div className="about-text">
+            <h1 className="reveal in" style={{
+              fontFamily: 'var(--display)', fontWeight: 500,
+              fontSize: 'clamp(38px, 6.2vw, 68px)', lineHeight: 1.04, letterSpacing: '-1.5px', maxWidth: '13ch',
+            }}>
+              Designing &amp; building things that feel <span className="italic-em">intentional</span>.
+            </h1>
+            <p className="lede reveal in" style={{ marginTop: '26px', maxWidth: '520px', transitionDelay: '80ms' }}>
+              Hello, I'm Parisa Singh, an Honors Computer Science major and Business minor at UMass Amherst.
+              I build software at the intersection of engineering, AI, design, and product, spanning frontend
+              and cloud to AI integration, turning technical decisions into intuitive experiences that solve real problems.
+            </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-              <svg width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
-              </svg>
-              Resume
-            </a>
-            <a href="https://www.linkedin.com/in/parisa-singh/" target="_blank" rel="noopener noreferrer" className="btn btn-outline" aria-label="LinkedIn">
-              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
-              </svg>
-              LinkedIn
-            </a>
-            <a href="https://github.com/parisa-singh" target="_blank" rel="noopener noreferrer" className="btn btn-outline" aria-label="GitHub">
-              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-              </svg>
-              GitHub
-            </a>
+          <div className="about-photo reveal in">
+            <img src={PROFILE_IMG} alt="Portrait of Parisa Singh" onError={(e) => { e.target.src = FALLBACK_IMG }} />
           </div>
         </div>
 
-        {/* Right: avatar */}
-        <div className="about-avatar">
-          <div style={{ position: 'relative' }}>
-            <div style={{
-              position: 'absolute', inset: '-26px', borderRadius: '50%',
-              background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)', zIndex: 0,
-            }} />
-            <div style={{
-              position: 'absolute', inset: '-3px', borderRadius: '50%',
-              background: 'linear-gradient(135deg, var(--grad-1) 0%, var(--grad-2) 100%)', zIndex: 1,
-            }} />
-            <img
-              src={PROFILE_IMG}
-              alt="Portrait of Parisa Singh"
-              onError={e => { e.target.src = FALLBACK_IMG }}
-              style={{
-                position: 'relative', zIndex: 2,
-                width: 'clamp(200px, 42vw, 300px)', height: 'clamp(200px, 42vw, 300px)',
-                borderRadius: '50%', objectFit: 'cover',
-                border: '5px solid var(--bg)', display: 'block',
-                boxShadow: '0 20px 60px var(--accent-glow)',
-              }}
-            />
-          </div>
+        {/* centered: links, focus topics, stats */}
+        <div className="hero-links reveal in">
+          <NavLink to="/projects" className="tlink">See my work <span className="ar">↗</span></NavLink>
+          <a className="tlink" href={RESUME_URL} target="_blank" rel="noopener noreferrer">Résumé <span className="ar">↗</span></a>
+          <a className="tlink" href={LINKEDIN} target="_blank" rel="noopener noreferrer">LinkedIn <span className="ar">↗</span></a>
+          <a className="tlink" href={GITHUB} target="_blank" rel="noopener noreferrer">GitHub <span className="ar">↗</span></a>
+        </div>
+
+        <div className="focus-line reveal in">
+          {FOCUS.map((t, i) => (
+            <span className="fi" key={t}>{i > 0 && <span className="b">•</span>}{t}</span>
+          ))}
+        </div>
+
+        <div className="stats-row reveal">
+          <Stat label="Currently">SWE Intern · <span style={{ color: 'var(--accent)' }}>EyeZense</span></Stat>
+          <Stat label="Leading">Vice President · <span style={{ color: 'var(--accent)' }}>UMass Design</span></Stat>
+          <Stat label="Studying">CS Major · <span style={{ color: 'var(--accent)' }}>Business Minor</span></Stat>
+        </div>
+
+        {/* ---------- overview ---------- */}
+        <div className="ov-title reveal"><span className="mono">// overview</span></div>
+
+        <div className="ov-grid">
+          <Panel title="Recent Experience" to="/experience">
+            {recentExp.map((e) => (
+              <NavLink className="ov-item ov-link" to={`/experience?highlight=${enc(e.role)}`} key={e.role + e.org}>
+                <div className="ov-line1">{e.role}</div>
+                <div className="ov-line2"><span>{e.org}</span><span className="mono">{e.period}</span></div>
+                <div className="ov-sub">{e.desc}</div>
+              </NavLink>
+            ))}
+          </Panel>
+
+          <Panel title="Recent Projects" to="/projects">
+            {recentProjects.length === 0 && <div className="ov-empty">Loading from GitHub…</div>}
+            {recentProjects.map((p) => (
+              <NavLink className="ov-item ov-link" to={`/projects?highlight=${enc(p.name)}`} key={p.id}>
+                <div className="ov-line1">{p.title || fmt(p.name)}</div>
+                <div className="ov-line2">
+                  <span>{p.descOverride || p.description || '—'}</span>
+                  {p.language && <span className="mono" style={{ color: 'var(--accent)', flexShrink: 0 }}>{p.language}</span>}
+                </div>
+              </NavLink>
+            ))}
+          </Panel>
+
+          <Panel title="Core Skills" to="/skills">
+            <div className="ov-chips">
+              {CORE_SKILLS.map((s) => (
+                <NavLink className="ov-chip" to={`/skills?highlight=${enc(s)}`} key={s}>{s}</NavLink>
+              ))}
+            </div>
+          </Panel>
+
+          <Panel title="Latest Writing" to="/articles">
+            {recentArticles.length === 0 && <div className="ov-empty">Fresh essays on Substack.</div>}
+            {recentArticles.map((a, i) => (
+              <a className="ov-item ov-link" key={a.guid || i} href={a.link} target="_blank" rel="noopener noreferrer">
+                <div className="mono" style={{ fontSize: '11px', color: 'var(--mut)', marginBottom: '3px' }}>{fmtDate(a.pubDate)}</div>
+                <div className="ov-line1 ov-clip">{a.title}</div>
+              </a>
+            ))}
+          </Panel>
         </div>
       </div>
 
       <style>{`
-        .about-hero {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: clamp(32px, 6vw, 72px);
-          flex-wrap: wrap;
-        }
-        .about-text { flex: 1 1 440px; max-width: 620px; }
-        .about-avatar { flex: 0 0 auto; display: flex; justify-content: center; }
-        @media (max-width: 860px) {
-          .about-hero { flex-direction: column-reverse; align-items: stretch; }
-          .about-text { max-width: 100%; }
-          .about-avatar { margin-bottom: 8px; }
-        }
+        .about-grid { display: grid; grid-template-columns: 1fr clamp(190px, 26%, 250px); gap: clamp(28px, 5vw, 56px); align-items: center; }
+        .about-photo { display: flex; justify-content: center; }
+        .about-photo img { width: 100%; max-width: 250px; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 50%; border: 1px solid var(--line); display: block; }
+
+        .hero-links { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 24px; margin-top: clamp(30px, 5vw, 46px); }
+        .focus-line { margin-top: clamp(24px, 4vw, 38px); display: flex; flex-wrap: nowrap; overflow-x: auto; align-items: center; justify-content: center; gap: 12px;
+          font-family: 'JetBrains Mono', monospace; font-size: 11.5px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--mut); padding-bottom: 4px; scrollbar-width: none; }
+        .focus-line::-webkit-scrollbar { display: none; }
+        .focus-line .fi { display: inline-flex; align-items: center; gap: 12px; white-space: nowrap; flex-shrink: 0; }
+        .focus-line .b { color: var(--accent); }
+        .stats-row { margin-top: clamp(22px, 3.5vw, 34px); padding-top: 22px; border-top: 1px solid var(--line);
+          display: flex; flex-wrap: nowrap; overflow-x: auto; justify-content: center; gap: clamp(24px, 5vw, 52px); scrollbar-width: none; }
+        .stats-row::-webkit-scrollbar { display: none; }
+
+        .ov-title { margin-top: clamp(48px, 8vw, 84px); margin-bottom: 18px; }
+        .ov-title .mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1px; color: var(--faint); }
+        .ov-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
+        .ov-panel { border: 1px solid var(--line); border-radius: 4px; background: var(--panel); padding: 22px 24px; min-width: 0; display: flex; flex-direction: column; }
+        .ov-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 4px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+        .ov-head h3 { font-family: var(--display); font-weight: 500; font-size: 17px; }
+        .ov-all { font-size: 12.5px; color: var(--mut); display: inline-flex; align-items: center; gap: 5px; transition: color 0.2s; flex-shrink: 0; }
+        .ov-all:hover { color: var(--accent); }
+        .ov-item { display: block; padding: 13px 0; border-bottom: 1px solid var(--line-soft); min-width: 0; }
+        .ov-item:last-child { border-bottom: none; }
+        .ov-link { transition: padding 0.2s; }
+        .ov-link:hover { padding-left: 6px; }
+        .ov-link:hover .ov-line1 { color: var(--accent); }
+        .ov-line1 { font-family: var(--display); font-weight: 500; font-size: 15.5px; transition: color 0.2s; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-line2 { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 12.5px; color: var(--mut); margin-top: 4px; min-width: 0; }
+        .ov-line2 > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-line2 .mono { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; flex-shrink: 0; }
+        .ov-sub { font-size: 12px; color: var(--mut); margin-top: 6px; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-clip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ov-chips { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 6px; }
+        .ov-chip { font-size: 12.5px; padding: 6px 12px; border-radius: 100px; border: 1px solid var(--line); color: var(--ink-2); cursor: pointer; transition: border-color 0.2s, color 0.2s, background 0.2s; }
+        .ov-chip:hover { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent); }
+        .ov-empty { color: var(--mut); font-size: 13px; padding: 8px 0; }
+
+        @media (max-width: 720px) { .about-grid { grid-template-columns: 1fr; } .about-photo { max-width: 200px; margin: 0 auto; } }
+        @media (max-width: 640px) { .ov-grid { grid-template-columns: 1fr; } }
       `}</style>
     </section>
   )

@@ -1,16 +1,49 @@
-# React + Vite
+# Parisa Singh — Personal Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+My portfolio: an editorial, responsive single-page-app portfolio built with React and Vite, deployed to GitHub Pages.
+Live at **https://parisa-singh.github.io/personal-website/**
 
-Currently, two official plugins are available:
+Pages: **About** (hero + overview dashboard), **Experience** (timeline), **Projects** (live from GitHub), **Skills**, and **Writing** (live from Substack).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech
 
-## React Compiler
+- **React 19** + **Vite** (SPA)
+- **HashRouter** (`/#/about` URLs — required for GitHub Pages static hosting)
+- **Tailwind v4** (CSS-first) with a custom design-token system in `src/index.css`
+- Light (**Bone & Ink**) / dark (**Noir**) themes with a single red accent; toggle persisted to `localStorage`
+- Display type **Fraunces**, body **Inter**, labels **JetBrains Mono**
+- Live data: GitHub repos + Substack RSS, both fetched client-side (Substack is cached for instant loads)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Commands
 
-## Expanding the ESLint configuration
+```bash
+npm install        # install dependencies
+npm run dev        # dev server at localhost:5173
+npm run build      # production build → dist/
+npm run preview    # preview the production build locally
+npm run lint       # ESLint
+npm run deploy     # build + publish dist/ to the gh-pages branch (this is the live site)
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+`main` holds the source; `gh-pages` holds the built output that GitHub Pages serves.
+
+## Editing content
+
+Most content lives in plain data files — no component surgery needed:
+
+| What | Where |
+|------|-------|
+| Experience / timeline | `src/data/experience.js` |
+| Which GitHub repos show (+ overrides) | `src/data/projects.js` (`VISIBLE` / `HIDDEN` / `OVERRIDES` / `ABOUT_PROJECTS`) |
+| Skills + proficiency levels | `src/data/skills.js` |
+| About hero copy, focus line, core skills | `src/pages/AboutMe.jsx` |
+
+By default Projects shows every public repo; set `VISIBLE` to curate a focused, ordered set.
+
+## Notes
+
+- All colors are theme-aware CSS variables — reference `var(--token)`, never hardcode hex.
+- Public asset paths must be prefixed with `import.meta.env.BASE_URL` (base is `/personal-website/`); filename case matters on GitHub Pages (`avatar.JPEG`).
+- See `CLAUDE.md` for the full architecture reference.
+
+🤖 This site was designed and built with [Claude Code](https://claude.com/claude-code).

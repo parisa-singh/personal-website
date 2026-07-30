@@ -1,15 +1,26 @@
 import { useState, useEffect, useCallback } from 'react'
 
 const FEED_URL = 'https://creativecompiler77.substack.com/feed'
+const CACHE_KEY = 'substack-articles-v1'
 
-// Ordered fallbacks. Each returns the raw RSS XML as text (except rss2json,
-// which returns already-normalized JSON). We try them in turn so a single
-// flaky/rate-limited service can't take the whole Articles page down.
+// Ordered fallbacks. Raw proxies return RSS XML we parse ourselves; rss2json is
+// the last resort (its anonymous tier is rate-limited, so never the sole source).
 const RAW_PROXIES = [
   (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
   (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
 ]
 const RSS2JSON = (url) => `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`
+
+function readCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY)
+    const parsed = raw ? JSON.parse(raw) : null
+    return Array.isArray(parsed) ? parsed : []
+  } catch { return [] }
+}
+function writeCache(items) {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify(items)) } catch { /* ignore */ }
+}
 
 function firstImage(html) {
   if (!html) return null
@@ -20,17 +31,13 @@ function firstImage(html) {
 function parseRss(xmlText) {
   const doc = new DOMParser().parseFromString(xmlText, 'text/xml')
   if (doc.querySelector('parsererror')) throw new Error('Malformed RSS')
-
   const items = Array.from(doc.querySelectorAll('item'))
   if (items.length === 0) throw new Error('No items in feed')
-
   return items.map((item, i) => {
     const get = (tag) => item.querySelector(tag)?.textContent?.trim() || ''
-    const content =
-      item.getElementsByTagName('content:encoded')[0]?.textContent || ''
+    const content = item.getElementsByTagName('content:encoded')[0]?.textContent || ''
     const description = get('description')
     const enclosure = item.querySelector('enclosure')?.getAttribute('url') || null
-
     return {
       guid: get('guid') || get('link') || String(i),
       title: get('title'),
@@ -43,18 +50,32 @@ function parseRss(xmlText) {
 }
 
 async function fetchViaRaw() {
-  for (const build of RAW_PROXIES) {
-    try {
-      const res = await fetch(build(FEED_URL))
-      if (!res.ok) continue
-      const text = await res.text()
-      const items = parseRss(text)
-      if (items.length) return items
-    } catch {
-      // try the next proxy
-    }
-  }
-  throw new Error('All raw proxies failed')
+  // Race all proxies in parallel — whichever returns a valid feed first wins,
+  // so one slow/dead proxy no longer adds its latency to the total.
+  const attempts = RAW_PROXIES.map((build) => (async () => {
+    const res = await fetch(build(FEED_URL))
+    if (!res.ok) throw new Error('bad status')
+    const items = parseRss(await res.text())
+    if (!items.length) throw new Error('empty feed')
+    return items
+  })())
+  return Promise.any(attempts) // rejects only if every proxy fails
+}
+
+async function fetchFeedItems() {
+  let items
+  try { items = await fetchViaRaw() }
+  catch { items = await fetchViaRss2Json() }
+  items.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
+  return items
+}
+
+/**
+ * Warm the cache as early as possible (called once on app load) so navigating
+ * to Writing reads from cache instantly instead of waiting on the network.
+ */
+export async function prefetchSubstack() {
+  try { writeCache(await fetchFeedItems()) } catch { /* ignore */ }
 }
 
 async function fetchViaRss2Json() {
@@ -73,22 +94,19 @@ async function fetchViaRss2Json() {
 }
 
 export function useSubstackFeed() {
-  const [articles, setArticles] = useState([])
-  const [loading, setLoading] = useState(true)
+  // Paint instantly from cache; only show the loading state on a truly cold start.
+  const [articles, setArticles] = useState(readCache)
+  const [loading, setLoading] = useState(() => readCache().length === 0)
   const [error, setError] = useState(null)
 
   const fetchFeed = useCallback(async () => {
     try {
-      let items
-      try {
-        items = await fetchViaRaw()
-      } catch {
-        items = await fetchViaRss2Json()
-      }
-      items.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
+      const items = await fetchFeedItems()
       setArticles(items)
+      writeCache(items)
       setError(null)
     } catch (err) {
+      // keep whatever cache we already showed; only surface an error on cold start
       setError(err.message)
     } finally {
       setLoading(false)
@@ -96,7 +114,6 @@ export function useSubstackFeed() {
   }, [])
 
   useEffect(() => {
-    // Fetch-on-mount + refetch on focus; all state updates happen after await.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchFeed()
     window.addEventListener('focus', fetchFeed)

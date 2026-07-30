@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { prefetchSubstack } from './hooks/useSubstackFeed'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import AboutMe from './pages/AboutMe'
@@ -24,6 +26,9 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
+  // Warm the Substack cache on load so the Writing page opens instantly.
+  useEffect(() => { prefetchSubstack() }, [])
+
   return (
     <HashRouter>
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
