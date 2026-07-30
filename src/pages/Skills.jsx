@@ -1,14 +1,8 @@
-import BokehBackground from '../components/BokehBackground'
+import Background from '../components/Background'
 
 const SOFT_SKILLS = [
-  { label: 'Leadership', icon: '🎯' },
-  { label: 'Communication', icon: '💬' },
-  { label: 'Teamwork', icon: '🤝' },
-  { label: 'Problem Solving', icon: '🧩' },
-  { label: 'Adaptability', icon: '🔄' },
-  { label: 'Time Management', icon: '⏱️' },
-  { label: 'Critical Thinking', icon: '🔍' },
-  { label: 'Creativity', icon: '✨' },
+  'Leadership', 'Communication', 'Teamwork', 'Problem Solving',
+  'Adaptability', 'Time Management', 'Critical Thinking', 'Creativity',
 ]
 
 const HARD_SKILLS = [
@@ -19,80 +13,73 @@ const HARD_SKILLS = [
   { label: 'SQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
   { label: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
   { label: 'HTML / CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' },
-  { label: 'Data Structures', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg' },
+  { label: 'C / C++', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg' },
 ]
+
+const ICON = {
+  ai: <path d="M9 3h6v3h3a2 2 0 0 1 2 2v3h-3M9 3H6a2 2 0 0 0-2 2v3h3M9 3v3m6-3v3M4 11H1m3 4H1m20-4h3m-3 4h3M9 21H6a2 2 0 0 1-2-2v-3h3m2 5h6v-3H9v3zm6 0h3a2 2 0 0 0 2-2v-3h-3M8 8h8v8H8z" />,
+  web: <><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" /></>,
+  ml: <path d="M3 3v18h18M7 15l3-4 3 3 5-7" />,
+  ux: <path d="M12 19l7-7a2.8 2.8 0 0 0-4-4l-7 7-1 5 5-1zM11 8l5 5" />,
+  game: <><rect x="2" y="7" width="20" height="10" rx="4" /><path d="M7 11v2m-1-1h2m8-1h.01M18 13h.01" /></>,
+  data: <><path d="M10 2v6l-5 8a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-8V2" /><path d="M8 2h8M7 15h10" /></>,
+}
 
 const SKILLSET = [
-  { label: 'Artificial Intelligence', icon: '🤖', desc: 'ML models, neural networks, NLP' },
-  { label: 'Web Development', icon: '🌐', desc: 'React, Vite, HTML/CSS, REST APIs' },
-  { label: 'Machine Learning', icon: '📊', desc: 'scikit-learn, pandas, data pipelines' },
-  { label: 'UI / UX Design', icon: '🎨', desc: 'Figma, user flows, prototyping' },
-  { label: 'Game Development', icon: '🎮', desc: 'Unity, C#, 2D/3D mechanics' },
-  { label: 'Data Science', icon: '🔬', desc: 'Statistical analysis, visualization' },
+  { label: 'Artificial Intelligence', k: 'ai', desc: 'ML models, neural networks, NLP' },
+  { label: 'Web Development', k: 'web', desc: 'React, Vite, REST APIs' },
+  { label: 'Machine Learning', k: 'ml', desc: 'scikit-learn, pandas, pipelines' },
+  { label: 'UI / UX Design', k: 'ux', desc: 'Figma, user flows, prototyping' },
+  { label: 'Game Development', k: 'game', desc: 'Unity, C#, 2D/3D mechanics' },
+  { label: 'Data Science', k: 'data', desc: 'Statistical analysis, visualization' },
 ]
 
-function SoftCard({ label, icon, delay }) {
+function SoftPill({ label, delay }) {
   return (
-    <div
-      className="skill-pill fade-in-up"
-      style={{ animationDelay: `${delay}ms`, animationFillMode: 'both', cursor: 'default' }}
-    >
-      <span style={{ fontSize: '18px' }}>{icon}</span>
-      <span style={{ color: '#c8ccdc', fontSize: '14px', fontWeight: 500 }}>{label}</span>
+    <div className="skill-pill fade-in-up" style={{ animationDelay: `${delay}ms`, animationFillMode: 'both' }}>
+      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent)', flexShrink: 0 }} />
+      <span style={{ color: 'var(--text-2)', fontSize: '14px', fontWeight: 500 }}>{label}</span>
     </div>
   )
 }
 
-function HardCard({ label, icon, delay }) {
+function HardPill({ label, icon, delay }) {
   return (
-    <div
-      className="skill-pill fade-in-up"
-      style={{ animationDelay: `${delay}ms`, animationFillMode: 'both', cursor: 'default' }}
-    >
-      <img
-        src={icon} alt={label} width="19" height="19"
-        style={{ objectFit: 'contain', flexShrink: 0 }}
-        onError={e => { e.target.style.display = 'none' }}
-      />
-      <span style={{ color: '#c8ccdc', fontSize: '14px', fontWeight: 500 }}>{label}</span>
+    <div className="skill-pill fade-in-up" style={{ animationDelay: `${delay}ms`, animationFillMode: 'both' }}>
+      <img src={icon} alt="" width="19" height="19" style={{ objectFit: 'contain', flexShrink: 0 }} onError={e => { e.target.style.display = 'none' }} />
+      <span style={{ color: 'var(--text-2)', fontSize: '14px', fontWeight: 500 }}>{label}</span>
     </div>
   )
 }
 
-function SkillsetCard({ label, icon, desc, delay }) {
+function SkillsetCard({ label, k, desc, delay }) {
   return (
     <div
       className="fade-in-up"
       style={{
-        animationDelay: `${delay}ms`,
-        animationFillMode: 'both',
-        padding: '18px 20px',
-        borderRadius: '12px',
-        background: 'rgba(12,14,28,0.6)',
-        border: '1px solid rgba(255,255,255,0.06)',
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '14px',
-        width: '260px',
-        flexShrink: 0,
+        animationDelay: `${delay}ms`, animationFillMode: 'both',
+        padding: '18px 20px', borderRadius: '12px',
+        background: 'var(--surface-2)', border: '1px solid var(--border)',
+        display: 'flex', alignItems: 'flex-start', gap: '14px',
         transition: 'border-color 0.2s, background 0.2s',
-        cursor: 'default',
       }}
-      onMouseEnter={e => {
-        e.currentTarget.style.borderColor = 'rgba(129,140,248,0.3)'
-        e.currentTarget.style.background = 'rgba(129,140,248,0.04)'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'
-        e.currentTarget.style.background = 'rgba(12,14,28,0.6)'
-      }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent-border-strong)'; e.currentTarget.style.background = 'var(--accent-tint-soft)' }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface-2)' }}
     >
-      <span style={{ fontSize: '22px', flexShrink: 0, marginTop: '1px' }}>{icon}</span>
+      <span style={{
+        width: '38px', height: '38px', borderRadius: '10px', flexShrink: 0,
+        background: 'var(--accent-tint)', border: '1px solid var(--accent-border)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-contrast)',
+      }}>
+        <svg width="19" height="19" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+          {ICON[k]}
+        </svg>
+      </span>
       <div>
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: '15px', color: '#e8eaf2', marginBottom: '4px' }}>
+        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: '15px', color: 'var(--text)', marginBottom: '3px' }}>
           {label}
         </div>
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#3d4663' }}>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: 'var(--text-faint)' }}>
           {desc}
         </div>
       </div>
@@ -100,88 +87,41 @@ function SkillsetCard({ label, icon, desc, delay }) {
   )
 }
 
-const CARD = {
-  borderRadius: '20px',
-  padding: '32px',
-  background: 'rgba(12,14,28,0.75)',
-  border: '1px solid rgba(255,255,255,0.07)',
-  backdropFilter: 'blur(12px)',
-  WebkitBackdropFilter: 'blur(12px)',
-}
-
-const SECTION_LABEL = { fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', letterSpacing: '2.5px', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }
-const SECTION_TITLE = { fontFamily: "'Space Grotesk', sans-serif", fontSize: '20px', fontWeight: 700, color: '#e8eaf2', marginBottom: '24px' }
-
 export default function Skills() {
   return (
-    <section style={{ position: 'relative', minHeight: 'calc(100vh - 80px)', padding: '40px 28px 72px', overflow: 'hidden' }}>
-      <BokehBackground />
+    <section className="page">
+      <Background variant="skills" />
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: '1140px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h1 style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontSize: 'clamp(32px, 4vw, 54px)',
-            fontWeight: 700,
-            letterSpacing: '-1.5px',
-            color: '#e8eaf2',
-          }}>
-            My Skills
-          </h1>
+      <div className="container page-content">
+        <div className="section-head">
+          <h1>Skills</h1>
+          <p>Languages, tools, and the areas I like to build in.</p>
         </div>
 
-        {/* Top row: two columns */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '24px' }}>
-          {/* People & Process */}
-          <div style={CARD}>
-            <span style={{ ...SECTION_LABEL, color: '#818cf8' }}>01 / People &amp; Process</span>
-            <h2 style={SECTION_TITLE}>Soft Skills</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '9px' }}>
-              {SOFT_SKILLS.map((s, i) => <SoftCard key={s.label} {...s} delay={i * 55} />)}
+        <div className="grid-2col" style={{ marginBottom: 'clamp(18px, 2.5vw, 24px)' }}>
+          <div className="card">
+            <span className="eyebrow">01 / People &amp; Process</span>
+            <h2 className="section-title">Soft Skills</h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '9px' }}>
+              {SOFT_SKILLS.map((s, i) => <SoftPill key={s} label={s} delay={i * 45} />)}
             </div>
           </div>
 
-          {/* Tech & Tools */}
-          <div style={CARD}>
-            <span style={{ ...SECTION_LABEL, color: '#818cf8' }}>02 / Tech &amp; Tools</span>
-            <h2 style={SECTION_TITLE}>Hard Skills</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '9px' }}>
-              {HARD_SKILLS.map((s, i) => <HardCard key={s.label} {...s} delay={i * 55 + 150} />)}
+          <div className="card">
+            <span className="eyebrow">02 / Tech &amp; Tools</span>
+            <h2 className="section-title">Hard Skills</h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '9px' }}>
+              {HARD_SKILLS.map((s, i) => <HardPill key={s.label} {...s} delay={i * 45 + 120} />)}
             </div>
           </div>
         </div>
 
-        {/* Bottom row: full-width Skillset */}
-        <div style={CARD}>
-          <span style={{ ...SECTION_LABEL, color: '#818cf8' }}>03 / Skillset</span>
-          <h2 style={SECTION_TITLE}>What I Build</h2>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
-            {SKILLSET.map((s, i) => <SkillsetCard key={s.label} {...s} delay={i * 60 + 300} />)}
+        <div className="card">
+          <span className="eyebrow">03 / Focus Areas</span>
+          <h2 className="section-title">What I Build</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '12px' }}>
+            {SKILLSET.map((s, i) => <SkillsetCard key={s.label} {...s} delay={i * 55 + 240} />)}
           </div>
-        </div>
-
-        {/* UMass note */}
-        <div style={{
-          marginTop: '28px',
-          padding: '20px 28px',
-          borderRadius: '14px',
-          background: 'rgba(129,140,248,0.04)',
-          border: '1px solid rgba(129,140,248,0.12)',
-          textAlign: 'center',
-        }}>
-          <p style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontSize: '16px',
-            fontWeight: 600,
-            letterSpacing: '0.2px',
-            color: '#e8eaf2',
-          }}>
-            <span style={{ color: '#818cf8' }}>CS Major &amp; Business Minor</span>
-            <span style={{ color: '#2e3158', margin: '0 10px' }}>·</span>
-            <span style={{ color: '#818cf8' }}>UMass Amherst</span>
-            <span style={{ color: '#2e3158', margin: '0 10px' }}>·</span>
-            <span style={{ color: '#818cf8' }}>Class of &#39;28</span>
-          </p>
         </div>
       </div>
     </section>

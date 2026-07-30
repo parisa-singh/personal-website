@@ -1,6 +1,6 @@
 const SOCIALS = [
   {
-    label: 'parisasingh@gmail.com',
+    label: 'Email',
     href: 'mailto:parisasingh@gmail.com',
     icon: (
       <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
@@ -31,7 +31,7 @@ const SOCIALS = [
   },
   {
     label: 'Substack',
-    href: 'https://substack.com/@creativecompiler77',
+    href: 'https://creativecompiler77.substack.com',
     icon: (
       <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
         <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/>
@@ -43,48 +43,43 @@ const SOCIALS = [
 export default function Footer() {
   return (
     <footer style={{
-      borderTop: '1px solid rgba(255,255,255,0.06)',
-      background: 'rgba(10,10,15,0.9)',
-      padding: '28px 24px',
+      borderTop: '1px solid var(--border)',
+      background: 'var(--footer-bg)',
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
+      padding: '28px clamp(20px, 5vw, 40px)',
+      position: 'relative',
+      zIndex: 1,
     }}>
       <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '20px',
+        maxWidth: '1180px', margin: '0 auto',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px',
       }}>
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
           {SOCIALS.map(({ label, href, icon }) => (
             <a
               key={label}
               href={href}
               target={href.startsWith('mailto') ? undefined : '_blank'}
               rel="noopener noreferrer"
+              aria-label={label}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '9px 18px',
-                borderRadius: '8px',
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                color: '#94a3b8',
-                fontSize: '13px',
-                fontWeight: 500,
+                display: 'flex', alignItems: 'center', gap: '8px',
+                padding: '9px 16px', borderRadius: '9px',
+                background: 'var(--surface-2)', border: '1px solid var(--border)',
+                color: 'var(--text-muted)', fontSize: '13px', fontWeight: 500,
                 transition: 'color 0.2s, border-color 0.2s, background 0.2s',
                 textDecoration: 'none',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.color = '#f59e0b'
-                e.currentTarget.style.borderColor = 'rgba(245,158,11,0.35)'
-                e.currentTarget.style.background = 'rgba(245,158,11,0.06)'
+                e.currentTarget.style.color = 'var(--accent-contrast)'
+                e.currentTarget.style.borderColor = 'var(--accent-border-strong)'
+                e.currentTarget.style.background = 'var(--accent-tint-soft)'
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.color = '#94a3b8'
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'
-                e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
+                e.currentTarget.style.color = 'var(--text-muted)'
+                e.currentTarget.style.borderColor = 'var(--border)'
+                e.currentTarget.style.background = 'var(--surface-2)'
               }}
             >
               {icon}
@@ -92,8 +87,8 @@ export default function Footer() {
             </a>
           ))}
         </div>
-        <p style={{ fontSize: '12px', color: '#475569', margin: 0 }}>
-          © {new Date().getFullYear()} Parisa Singh · UMass Amherst
+        <p style={{ fontSize: '12px', color: 'var(--text-faint)', margin: 0 }}>
+          © {new Date().getFullYear()} Parisa Singh · Built with React &amp; Vite
         </p>
       </div>
     </footer>

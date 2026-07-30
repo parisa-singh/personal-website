@@ -22,20 +22,17 @@ npm run preview    # locally preview the production build
 
 **Page transitions**: `App.jsx` wraps `<Routes>` in a div keyed on `location.pathname`. Changing the key causes React to remount the div, re-triggering the `.page-reveal` CSS animation defined in `index.css`.
 
-**Backgrounds**: Each page has a unique full-page `<canvas>` component using `useEffect` + `requestAnimationFrame`. All use `document.addEventListener('mousemove', ...)` (not `canvas.addEventListener`) so mouse interaction works even when the cursor is over text. Canvas components: `StarsBackground` (Projects), `FloatBackground` (About), `BokehBackground` (Skills), `RippleBackground` (Articles), `CircuitBackground` (Experience).
+**Theme (light/dark)**: A single `data-theme` attribute on `<html>` drives everything. An inline script in `index.html` sets it before first paint (from `localStorage.theme`, else `prefers-color-scheme`) to avoid a flash. `src/hooks/useTheme.js` owns the state: it writes the attribute + `localStorage`, syncs the `<meta name="theme-color">`, and fires a `themechange` window event. The `ThemeToggle` in `Navbar` is the only place `useTheme()` is instantiated. All colors are CSS variables defined per-theme in `index.css` (`:root[data-theme="dark"]` / `[data-theme="light"]`) — components reference `var(--token)` (in inline styles too), so the whole site recolors from one place.
+
+**Background**: One shared `<canvas>` component, `src/components/Background.jsx`, used on every page with a `variant` prop (`about`/`experience`/`projects`/`skills`/`articles`) that nudges density/speed. It reads its particle colors from CSS variables via `readParticleColors()` (in `useTheme.js`) and re-reads them on the `themechange` event; it respects `prefers-reduced-motion` (paints one static frame, no rAF loop) and caps particle count on small screens. Uses `document.addEventListener('mousemove', ...)` so cursor interaction works over text. (The old per-page canvases — StarsBackground/FloatBackground/BokehBackground/RippleBackground/CircuitBackground — were consolidated into this.)
 
 **Live data**:
 - `useGitHubRepos` — fetches `api.github.com/users/parisa-singh/repos`, filters `!fork && !private`, refreshes on `window` focus
-- `useSubstackFeed` — fetches Substack RSS via `api.rss2json.com` (avoids CORS), sorts by `pubDate` desc, refreshes on focus
+- `useSubstackFeed` — fetches the raw Substack RSS (`creativecompiler77.substack.com/feed`) through CORS proxies (`allorigins` → `corsproxy.io`) and parses it client-side with `DOMParser`; falls back to `api.rss2json.com` if both proxies fail. `api.rss2json.com`'s anonymous tier is rate-limited and was the original cause of the feed silently failing — do not make it the sole source again. Sorts by `pubDate` desc, refreshes on focus. Projects render in a responsive grid (`.grid-cards`); Swiper is no longer used.
 
-**Styling**: Tailwind CSS v4 (CSS-first — `@import "tailwindcss"` at top of `index.css`, no `tailwind.config.js`). Custom design tokens and component classes (`.btn-cyan`, `.btn-violet`, `.skill-pill`, `.topic-tag`, `.fade-in-up`, `.page-reveal`) are defined in `index.css`, not via Tailwind utilities.
+**Styling**: Tailwind CSS v4 (CSS-first — `@import "tailwindcss"` at top of `index.css`, no `tailwind.config.js`). Design tokens (CSS variables, per-theme) and component/layout classes are defined in `index.css`, not via Tailwind utilities. Key classes: layout — `.container`, `.page`, `.page-content`, `.section-head`, `.card`, `.eyebrow`, `.section-title`, `.grid-2col`, `.grid-cards`; buttons — `.btn` + `.btn-primary` / `.btn-outline` (legacy `.btn-cyan` / `.btn-violet` are kept as aliases); plus `.skill-pill`, `.topic-tag`, `.fade-in-up`, `.page-reveal`, `.line-clamp-3`. A `prefers-reduced-motion` block neutralizes animations/transitions.
 
-**Color system**:
-- Background: `#07080f` (near-black with blue tint)
-- Card surfaces: `rgba(12, 14, 28, 0.75)`
-- Primary accent: `#818cf8` (indigo) — buttons, nav active, glows, particle colors
-- Secondary accent: `#a78bfa` / `#a5b4fc` (violet) — `.btn-violet` secondary buttons
-- UI chrome: `#14163a`, `#1e2040` (dark navy, scrollbar/swiper)
+**Color system**: All colors are theme-aware CSS variables (never hardcode hex in components — use `var(--token)`). Semantic tokens include `--bg`, `--surface` / `--surface-2` / `--surface-solid`, `--border` / `--border-strong`, text ramp (`--text`, `--text-2`, `--text-muted`, `--text-dim`, `--text-faint`, `--text-ghost`), accents (`--accent`, `--accent-strong`, `--accent-2`, `--accent-contrast` = accent text safe on the page bg), accent tints/borders/glow, `--grad-1`/`--grad-2` (gradient text), nav/footer surfaces, `--chrome`/`--chrome-2`, and `--particle-a/-b/-c/-line` (rgb triplets for the canvas). Dark defaults to `#07080f` bg + `#818cf8` indigo accent; light uses a light surface set with a deeper `#4f46e5` indigo for contrast.
 
 ## Content to Edit
 

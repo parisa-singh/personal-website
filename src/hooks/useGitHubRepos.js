@@ -9,7 +9,6 @@ export function useGitHubRepos() {
   const [error, setError] = useState(null)
 
   const fetchData = useCallback(async () => {
-    setError(null)
     try {
       const [reposRes, profileRes] = await Promise.all([
         fetch(`https://api.github.com/users/${USERNAME}/repos?sort=updated&per_page=30`),
@@ -19,6 +18,7 @@ export function useGitHubRepos() {
       const [reposData, profileData] = await Promise.all([reposRes.json(), profileRes.json()])
       setRepos(reposData.filter(r => !r.fork && r.name !== `${USERNAME}.github.io`))
       setProfile(profileData)
+      setError(null)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -27,6 +27,8 @@ export function useGitHubRepos() {
   }, [])
 
   useEffect(() => {
+    // Fetch-on-mount + refetch on focus; all state updates happen after await.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData()
     window.addEventListener('focus', fetchData)
     return () => window.removeEventListener('focus', fetchData)
