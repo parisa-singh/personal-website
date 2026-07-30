@@ -4,13 +4,44 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/personal-website/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Parisa Singh — CS Major & Business Minor at UMass Amherst" />
-    <title>Parisa Singh</title>
+    <meta name="theme-color" content="#07080f" />
+
+    <title>Parisa Singh — Computer Science @ UMass Amherst</title>
+    <meta name="description" content="Parisa Singh — Computer Science student at UMass Amherst working across AI/ML, software engineering, and UI/UX. Projects, experience, and writing." />
+    <meta name="author" content="Parisa Singh" />
+
+    <!-- Open Graph / social sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Parisa Singh — Computer Science @ UMass Amherst" />
+    <meta property="og:description" content="Software engineer and CS student building across AI/ML, full-stack, and design. Explore my projects, experience, and writing." />
+    <meta property="og:url" content="https://parisa-singh.github.io/personal-website/" />
+    <meta property="og:image" content="https://parisa-singh.github.io/personal-website/avatar.JPEG" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Parisa Singh — Computer Science @ UMass Amherst" />
+    <meta name="twitter:description" content="Software engineer and CS student building across AI/ML, full-stack, and design." />
+    <meta name="twitter:image" content="https://parisa-singh.github.io/personal-website/avatar.JPEG" />
+
+    <!-- Set theme before first paint to avoid a flash of the wrong theme -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+          var theme = stored || (prefersLight ? 'light' : 'dark');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/personal-website/assets/index-D-YrLibv.js"></script>
-    <link rel="stylesheet" crossorigin href="/personal-website/assets/index-T6-Sdk-8.css">
+    <script type="module" crossorigin src="/personal-website/assets/index-1ZKXSjjI.js"></script>
+    <link rel="stylesheet" crossorigin href="/personal-website/assets/index-DfhHrPgj.css">
   </head>
   <body>
     <div id="root"></div>
