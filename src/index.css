@@ -261,23 +261,51 @@ img { max-width: 100%; }
 .foot-link:hover { color: var(--accent); }
 
 /* ---------- halo highlight (cross-page navigation cue) ----------
-   Deliberately louder and distinct from any hover state: a persistent
-   accent ring + an accent-tinted fill + a repeating outward pulse.
-   Same treatment on every highlightable element for consistency. */
-@keyframes haloPulse {
-  0%   { box-shadow: 0 0 0 2px var(--accent), 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
-  70%  { box-shadow: 0 0 0 2px var(--accent), 0 0 0 18px color-mix(in srgb, var(--accent) 0%, transparent); }
-  100% { box-shadow: 0 0 0 2px var(--accent), 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); }
+   Deliberately louder and distinct from any hover state. `useHighlight`
+   injects a `.halo-fx` overlay (three staggered ring layers) into the
+   target, so the SAME sonar-style echoing halo renders on every element
+   regardless of its own pseudo-elements (e.g. .exp-row uses ::before for
+   its timeline dot). The overlay covers the target edge-to-edge,
+   corner-to-corner (border-radius: inherit) and fades out smoothly
+   (opacity) when the cue is dismissed. */
+@keyframes haloEcho {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); opacity: 1; }
+  70%  { box-shadow: 0 0 0 20px color-mix(in srgb, var(--accent) 0%, transparent); opacity: 0; }
+  100% { box-shadow: 0 0 0 20px color-mix(in srgb, var(--accent) 0%, transparent); opacity: 0; }
 }
 .halo {
-  animation: haloPulse 1.1s ease-out infinite;
-  border-color: var(--accent) !important;
-  background-color: color-mix(in srgb, var(--accent) 15%, var(--panel)) !important;
   position: relative;
-  z-index: 4;
+  z-index: 4; /* keep the outward rings above adjacent rows/cards */
 }
+/* the injected overlay: persistent solid ring + accent wash, fades on dismiss */
+.halo-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  border-radius: inherit;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--accent) 11%, transparent);
+  box-shadow: 0 0 0 2px var(--accent);
+  opacity: 1;
+  transition: opacity 0.9s ease;
+}
+/* three echoing rings, each born 0.7s apart over the 2.1s cycle — the
+   target covers their centers, so each shows only as an outward ring */
+.halo-fx > span {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  animation: haloEcho 2.1s ease-out infinite;
+}
+.halo-fx > span:nth-child(2) { animation-delay: 0.7s; }
+.halo-fx > span:nth-child(3) { animation-delay: 1.4s; }
+/* dismissal: freeze the rings and dissolve the whole overlay over ~0.9s */
+.halo.halo-out .halo-fx { opacity: 0; }
+.halo.halo-out .halo-fx > span { animation-play-state: paused; }
 @media (prefers-reduced-motion: reduce) {
-  .halo { animation: none; box-shadow: 0 0 0 2px var(--accent), 0 0 0 7px color-mix(in srgb, var(--accent) 30%, transparent) !important; }
+  .halo-fx { box-shadow: 0 0 0 2px var(--accent), 0 0 0 6px color-mix(in srgb, var(--accent) 26%, transparent); }
+  .halo-fx > span { animation: none; box-shadow: none; }
 }
 
 /* ---------- motion ---------- */
