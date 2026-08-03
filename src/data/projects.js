@@ -9,9 +9,22 @@
 //    Put repo names here to show ONLY those, in exactly this order.
 //    (Use the repo name as it appears on GitHub, e.g. 'personal-website'.)
 export const VISIBLE = [
-  // 'eyezense-edm',
-  // 'personal-website',
-  // 'my-design-system',
+  'personal-website',
+  'nikshi-foundation',
+  'igcse-zyarisa',
+  'your-nudge',
+  'hearsay',
+  'mind-glow',
+  'photography-showcase',
+  'ui-components-library',
+  'pixel-art-editor',
+  'world-clock',
+  'pomodoro-timer',
+  'to-do-list',
+  'snake',
+  'color-picker',
+  'hovering-buttons-showcase',
+  'weather',
 ]
 
 // 2) HIDDEN — repos to always drop (only applies when VISIBLE is empty).
@@ -41,12 +54,17 @@ export const OVERRIDES = {
   // },
 }
 
+/** A repo counts as "live" only if it has a homepage (deployed website) set.
+ *  Projects without a live, functioning site are never shown. */
+export const hasLiveSite = (r) => typeof r.homepage === 'string' && r.homepage.trim() !== ''
+
 /**
  * Apply the config above to the raw repo list from GitHub.
  * Returns the final, ordered, curated array of projects.
+ * Only repos with a live website (see `hasLiveSite`) are ever included.
  */
 export function curateRepos(repos) {
-  const publics = repos.filter((r) => !r.private && !r.fork)
+  const publics = repos.filter((r) => !r.private && !r.fork && hasLiveSite(r))
 
   const withOverrides = publics.map((r) => {
     const o = OVERRIDES[r.name] || {}
