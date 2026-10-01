@@ -63,7 +63,7 @@ export default function AboutMe() {
       <div className="container">
         {/* ---------- hero ---------- */}
         <p className="kicker reveal in">
-          UMass Amherst&nbsp; · &nbsp;Honors&nbsp; · &nbsp;Class of &rsquo;28
+          UMass Amherst&nbsp; · &nbsp;Class of &rsquo;28
         </p>
 
         <div className="about-grid">
@@ -75,7 +75,7 @@ export default function AboutMe() {
               Designing &amp; building things that feel <span className="italic-em">intentional</span>.
             </h1>
             <p className="lede reveal in" style={{ marginTop: '26px', maxWidth: '520px', transitionDelay: '80ms' }}>
-              Hello, I'm Parisa Singh, an Honors Computer Science major and Business minor at UMass Amherst.
+              Hello, I'm Parisa Singh, a Computer Science major and Business minor at UMass Amherst.
               I build software at the intersection of engineering, AI, design, and product, spanning frontend
               and cloud to AI integration, turning technical decisions into intuitive experiences that solve real problems.
             </p>
