@@ -4,6 +4,7 @@ export const LINKEDIN = 'https://www.linkedin.com/in/parisa-singh/'
 // `type`: 'work' (internships & jobs) or 'club' (clubs & organizations).
 // `start`: YYYY-MM — used to sort each column most-recent-first.
 // `current: true` marks ongoing roles.
+// `lens`: optional relevance weights (0–3) retained for possible future use.
 export const EXPERIENCE = [
   {
     type: 'club',
@@ -13,6 +14,7 @@ export const EXPERIENCE = [
     period: 'Jul 2026 — Present',
     current: true,
     desc: "Securing sponsors and partnerships for the Pioneer Valley's hackathon for women and nonbinary technologists.",
+    lens: { swe: 0, fde: 1, pm: 3 },
   },
   {
     type: 'work',
@@ -22,6 +24,7 @@ export const EXPERIENCE = [
     period: 'May 2026 — Present',
     current: true,
     desc: 'Building the Edge Device Management platform — device health monitoring and AI-driven anomaly detection for distributed edge systems.',
+    lens: { swe: 3, fde: 3, pm: 1 },
   },
   {
     type: 'club',
@@ -31,6 +34,7 @@ export const EXPERIENCE = [
     period: 'Sep 2025 — Feb 2026',
     current: false,
     desc: 'Led campus marketing and digital presence — campaigns, flyers, and partner communications on the PIT Executive Board.',
+    lens: { swe: 0, fde: 1, pm: 2 },
   },
   {
     type: 'work',
@@ -40,6 +44,7 @@ export const EXPERIENCE = [
     period: 'May 2025 — Present',
     current: true,
     desc: 'Promoted from Consultant I to II. Advanced hardware, software, and network support across campus; mentor junior consultants.',
+    lens: { swe: 1, fde: 2, pm: 1 },
   },
   {
     type: 'club',
@@ -49,6 +54,7 @@ export const EXPERIENCE = [
     period: 'Jan 2025 — Present',
     current: true,
     desc: 'Grew from Event Coordinator to Vice President. Lead the exec board, events, and budget — building a human-centered design community.',
+    lens: { swe: 0, fde: 1, pm: 3 },
   },
   {
     type: 'work',
@@ -58,6 +64,7 @@ export const EXPERIENCE = [
     period: 'Jun — Jul 2023',
     current: false,
     desc: 'Built a Python procurement-modeling tool for real-time demand prediction and ordering on a B2B platform.',
+    lens: { swe: 3, fde: 2, pm: 2 },
   },
   {
     type: 'work',
@@ -67,5 +74,6 @@ export const EXPERIENCE = [
     period: 'Jun — Jul 2022',
     current: false,
     desc: 'Designed co-working floor plans and layouts in AutoCAD and SketchUp; collaborated on 2D and 3D projects.',
+    lens: { swe: 0, fde: 0, pm: 1 },
   },
 ]
