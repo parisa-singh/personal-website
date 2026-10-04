@@ -1,53 +1,73 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 
-import { useTheme } from './hooks/useTheme'
 import { useGitHubRepos } from './hooks/useGitHubRepos'
 import { useSubstackFeed, prefetchSubstack } from './hooks/useSubstackFeed'
-import { useSmoothScroll } from './hooks/useSmoothScroll'
 
-import Cursor from './fx/Cursor'
-import Intro from './fx/Intro'
-import Nav from './sections/Nav'
-import Hero from './sections/Hero'
-import Work from './sections/Work'
-import Path from './sections/Path'
-import Toolkit from './sections/Toolkit'
-import Words from './sections/Words'
-import Footer from './sections/Footer'
+import Boot from './boot/Boot'
+import CommandBar from './components/CommandBar'
+import SiteFooter from './components/SiteFooter'
+import ResumeModal from './components/ResumeModal'
+import Home from './pages/Home'
+import Work from './pages/Work'
+import Projects from './pages/Projects'
+import Skills from './pages/Skills'
+import Writing from './pages/Writing'
 
 const seenIntro = () => { try { return sessionStorage.getItem('introSeen') === '1' } catch { return false } }
 
+function Routed({ repos, loading, articles, aLoading, onResume }) {
+  const location = useLocation()
+  useEffect(() => { window.scrollTo(0, 0) }, [location.pathname])
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div key={location.pathname} className="route"
+        initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.3, 1] }}>
+        <Routes location={location}>
+          <Route path="/" element={<Home onResume={onResume} />} />
+          <Route path="/work" element={<Work />} />
+          <Route path="/projects" element={<Projects repos={repos} loading={loading} />} />
+          <Route path="/skills" element={<Skills />} />
+          <Route path="/writing" element={<Writing articles={articles} loading={aLoading} />} />
+          <Route path="*" element={<Home onResume={onResume} />} />
+        </Routes>
+      </motion.div>
+    </AnimatePresence>
+  )
+}
+
 export default function App() {
-  const { theme, toggle } = useTheme()
   const { repos, loading } = useGitHubRepos()
   const { articles, loading: aLoading } = useSubstackFeed()
-
   const [booted, setBooted] = useState(seenIntro)
-  useSmoothScroll(true)
+
   useEffect(() => { prefetchSubstack() }, [])
 
-  const finishIntro = () => {
+  const finishBoot = () => {
     setBooted(true)
     try { sessionStorage.setItem('introSeen', '1') } catch { /* ignore */ }
   }
+  const replayBoot = () => setBooted(false)
+  const [resumeOpen, setResumeOpen] = useState(false)
 
   return (
-    <>
-      <Cursor />
+    <HashRouter>
       <AnimatePresence>
-        {!booted && <Intro key="intro" onDone={finishIntro} />}
+        {!booted && <Boot key="boot" onDone={finishBoot} />}
       </AnimatePresence>
 
-      <Nav theme={theme} toggle={toggle} />
-      <main>
-        <Hero ready={booted} />
-        <Work repos={repos} loading={loading} />
-        <Path />
-        <Toolkit />
-        <Words articles={articles} loading={aLoading} />
-      </main>
-      <Footer />
-    </>
+      <div className="site">
+        <CommandBar onReplay={replayBoot} onResume={() => setResumeOpen(true)} />
+        <main className="site-main">
+          <Routed repos={repos} loading={loading} articles={articles} aLoading={aLoading} onResume={() => setResumeOpen(true)} />
+        </main>
+        <SiteFooter />
+        <AnimatePresence>
+          {resumeOpen && <ResumeModal key="resume" onClose={() => setResumeOpen(false)} />}
+        </AnimatePresence>
+      </div>
+    </HashRouter>
   )
 }

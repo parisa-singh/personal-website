@@ -5,47 +5,112 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev        # start Vite dev server at localhost:5173 (or next available port)
+npm run dev        # Vite dev server at localhost:5173 (or next free port)
 npm run build      # production build → dist/
-npm run deploy     # build + push dist/ to gh-pages branch (runs predeploy automatically)
-npm run lint       # ESLint
-npm run preview    # locally preview the production build
+npm run deploy     # build + push dist/ to gh-pages branch (predeploy runs the build)
+npm run lint       # ESLint (flat config; eslint-plugin-react-hooks v7 — note its strict
+                   # `immutability` / "setState in effect" rules; prefer derived state)
+npm run preview    # preview the production build locally
 ```
+
+## What this is
+
+Parisa Singh's personal site — a **"Command Deck"** portfolio: a premium dark, emerald-accented,
+data-panel aesthetic (Linear/Bloomberg-terminal feel) that reads well to both technical and business
+audiences. It opens with a **Matrix-style boot sequence**, then reveals a **multi-page** site.
+
+**Static site** on GitHub Pages. No backend; all data is fetched client-side.
 
 ## Architecture
 
-**Static site** deployed to GitHub Pages. No backend. All data is fetched client-side.
+**Entry & boot gate** (`src/App.jsx`): mounts `<HashRouter>` and, until the boot completes, overlays
+`src/boot/Boot.jsx`. Boot plays **once per tab** (guarded by `sessionStorage.introSeen`). The **⏻ power
+button** in the command bar replays it (`replayBoot` sets `booted=false`, remounting Boot). After Boot's
+`onDone`, the routed site shows.
 
-**Routing**: `HashRouter` is required (not `BrowserRouter`) — GitHub Pages serves static files with no server rewrite support, so `/#/about` style URLs are used throughout.
+**Boot sequence** (`src/boot/`): three stages — a glitchy **terminal** types an intro (`Typewriter.jsx`,
+lines prefixed `::` render as the glitch headline), then on ENTER/tap a **code-particle** stage
+(`three/ParticleCanvas.jsx` → `three/concepts/ParticleFlow.jsx`, the `</>` shape, Matrix-green) with a
+**loading bar that morphs into a "Proceed" button** (framer-motion shared `layoutId`), the particles
+scaling up and lifting. `MatrixRain.jsx` is the digital-rain backdrop. The WebGL is lazy-loaded behind an
+error boundary (`Safe` in `Boot.jsx`) with a CSS-orb fallback. Self-contained green theme, independent of
+the site palette.
 
-**Base URL**: Vite is configured with `base: '/personal-website/'`. All public asset references must use `import.meta.env.BASE_URL` as a prefix (e.g. the profile image: `${import.meta.env.BASE_URL}avatar.JPEG`). The filename case matters on Linux (GitHub Pages) — `avatar.JPEG` not `avatar.jpeg`.
+**Routing** (HashRouter — GitHub Pages has no server rewrites, so URLs are `/#/projects` etc.). Routes:
+`/` → `Home` (Overview deck), `/work` → `Work` (Experience), `/projects` → `Projects`, `/skills` →
+`Skills`, `/writing` → `Writing`, `*` → `Home`. The `Routed` component scrolls to top on path change and
+wraps `<Routes>` in an `AnimatePresence` keyed on `location.pathname` for a fade/slide page transition.
 
-**Page transitions**: `App.jsx` wraps `<Routes>` in a div keyed on `location.pathname`. Changing the key causes React to remount the div, re-triggering the `.page-reveal` CSS animation defined in `index.css`.
+**Shell**:
+- `components/CommandBar.jsx` — sticky top nav: ⏻ replay button + `PARISA/SINGH` brand, nav links
+  (Overview / Experience / Projects / Skills / Writing) **plus a `Résumé` button** that opens the résumé
+  modal, a `looking for internships` status chip, and a mobile burger menu. Active link styled via
+  `NavLink` `.active`.
+- `components/SiteFooter.jsx` — "Signal" contact block (LinkedIn / GitHub / Substack / Email).
+- `components/ResumeModal.jsx` — popup launched from the hero button and the nav `Résumé` item; lists the
+  three résumé variants from `RESUMES` (SWE → FDE → PM), each opening its Drive PDF in a new tab. Closes on
+  ✕ / Esc / backdrop click.
+- `components/Panel.jsx` — the reusable deck module (border + corner ticks + mono `tag`/`label` header).
+- `components/PageHead.jsx` — shared inner-page header (`tag` · title · note).
 
-**Design language**: Editorial/minimal. Display type is **Fraunces** (serif, via `--display`), body is Inter, labels are JetBrains Mono. Two themes: **light = "Bone & Ink"** (warm paper `#f4f1e9`, ink text) and **dark = "Noir"** (`#100f0d`, bone text). A **single red accent `#c0392b`** is used in both modes (chosen because it reads on both surfaces — gold/yellow would fail on the light paper). No cards-with-glow or particle effects — the look is hairline rules, whitespace, and restraint. This replaced an earlier indigo/dark "dev portfolio" theme with animated canvases.
-
-**Theme (light/dark)**: A single `data-theme` attribute on `<html>` drives everything. An inline script in `index.html` sets it before first paint (from `localStorage.theme`, else `prefers-color-scheme`, default light) to avoid a flash. `src/hooks/useTheme.js` owns the state: writes the attribute + `localStorage` and syncs `<meta name="theme-color">`. The `ThemeToggle` in `Navbar` is the only place `useTheme()` is instantiated. All colors are CSS variables defined per-theme in `index.css` (`:root[data-theme="light"]` / `[data-theme="dark"]`) — components reference `var(--token)` (in inline styles too), so the whole site recolors from one place. **There is no animated/canvas background** (removed for the editorial look). Scroll-reveal is handled by `src/hooks/useReveal.js` (IntersectionObserver adds `.in` to `.reveal` elements); call `useReveal()` once per page.
-
-**Cross-page halo highlight**: `src/hooks/useHighlight.js` reads a `?highlight=<value>` query param (works under HashRouter via `useSearchParams`), finds the element with a matching `data-hl="<value>"` attribute, scrolls it into view, adds the `.halo` class, and injects a `.halo-fx` overlay — held ~2.8s, then dismissed by adding `.halo-out` which fades the overlay's opacity to 0 over ~0.9s before it's removed. `.halo` is a deliberately loud, hover-distinct cue: the injected `.halo-fx` overlay draws a persistent solid accent ring + accent wash + a **sonar-style echo** of three staggered rings (each an expanding, fading `box-shadow` on a `<span>`; the target covers their centers so each reads as an outward ring). The overlay (not a CSS pseudo-element) is used so the effect is identical on every target regardless of the pseudo-elements it already uses (e.g. `.exp-row`'s `::before` timeline dot); it's absolutely positioned (out of flow) so it never disturbs the target's grid/flex layout, and uses `border-radius: inherit` to hug each target's corners. Used so overview items on About deep-link into their page with the target highlighted: Core-Skills chips → `/skills?highlight=<skill>` (each `.logo-tile`/`.drow` has `data-hl={label}`), Recent-Experience items → `/experience?highlight=<role>` (`.exp-row` has `data-hl={role}`), Recent-Projects items → `/projects?highlight=<repo>` (`.proj-card` has `data-hl={repo.name}`). Pages call `useHighlight()` (Projects passes a `ready` flag so it waits for repos to load). Highlight labels must match the target's `data-hl` exactly.
+**Pages** (`src/pages/`):
+- `Home` — **one clear focus**: a hero (eyebrow, big name, one-line pitch, `View the work` + `Résumé`
+  CTAs, a status line, and the avatar portrait) followed by **four "doorway" cards** into the detail pages.
+  Deliberately sparse — detail lives on the dedicated pages, not here. Takes `onResume` to open the modal.
+- `Work` — two columns, **Internships & Work** | **Clubs & Organizations**, each a timeline (`.exp-row`);
+  ongoing roles (`current`) sort first and get an emerald dot.
+- `Projects` — `curateRepos(repos)` card grid + a **language-breakdown bar** (top-6 languages + Other).
+  **Owner pin mode**: add `?edit` to the Projects URL (`/#/projects?edit`) to unlock pin toggles
+  (remembered in `localStorage.ownerMode`). Pins live in `localStorage.pinnedProjects`; pinned repos sort
+  first with an emerald border + `◆ pinned` marker. `copy pins` copies the list so it can be **baked into
+  the code** for all visitors (localStorage is per-device). Visitors never see pin controls.
+- `Skills` — tools as a **4-wide logo grid** (devicon icons + proficiency dots), Focus & Strengths as
+  **dot rows**.
+- `Writing` — **article cards** from the Substack feed, with a loading skeleton and empty-state fallback.
 
 **Live data**:
-- `useGitHubRepos` — fetches `api.github.com/users/parisa-singh/repos`, filters `!fork && !private`, refreshes on `window` focus
-- `useSubstackFeed` — fetches the raw Substack RSS (`creativecompiler77.substack.com/feed`) through CORS proxies (`allorigins` → `corsproxy.io`), parses it client-side with `DOMParser`, and falls back to `api.rss2json.com` only if both proxies fail (its anonymous tier is rate-limited — do not make it the sole source). **Stale-while-revalidate**: the last successful fetch is cached in `localStorage` (`substack-articles-v1`) and painted instantly on load, then revalidated in the background — so Articles is fast on repeat visits and never shows a cold spinner once cached.
+- `useGitHubRepos` — `api.github.com/users/parisa-singh/repos`, filters `!fork && !private`, refreshes on window focus.
+- `useSubstackFeed` — Substack RSS via CORS proxies (`allorigins` → `corsproxy.io`), falling back to
+  `api.rss2json.com`. **Stale-while-revalidate** with a `localStorage` cache (`substack-articles-v1`).
 
-**Projects curation**: `src/data/projects.js` controls which repos appear. **Only repos with a live, functioning website are ever shown** — `curateRepos` filters to those whose GitHub `homepage` field is a non-empty string (`hasLiveSite(r)`); repos without a deployed site are dropped regardless of `VISIBLE`/`OVERRIDES`. On top of that: `VISIBLE` (allowlist) — empty = show all public repos (that have a live site); non-empty = show exactly those names in that order (still only if they have a live site). `HIDDEN` — names to drop when `VISIBLE` is empty. `OVERRIDES` — per-repo `{ title, description, tags, featured, hidden }`. `curateRepos(repos)` applies all of it (featured sorts to top). Because the list is pre-filtered to live sites, every `.proj-card` always renders the `Live` button. `ABOUT_PROJECTS` — names (in order) for the "Recent Projects" box on the About page; empty = first 3 of the curated list. `Projects.jsx` renders the curated repos as a **card grid** (`.proj-grid`/`.proj-card`, Code = `.pbtn-code` outline, Live = `.pbtn-live` filled) and computes the **language breakdown bar** using validated categorical colors (`--lang-blue/-orange/-aqua/-yellow/-magenta/-violet/-other`, top-6-by-count + Other) — these passed the dataviz CVD/contrast validator on both surfaces; keep red out of that set (it's the brand accent).
+**Design system** — all under a single `.site` scope so it's self-contained and theme-independent (the
+site is **dark-only**; it does not use `data-theme`). Premium dark ground, cool off-white ink, a refined
+**emerald accent `--grn:#34d399`** used sparingly. **Inter** for prose and headings (business-legible),
+**JetBrains Mono** (`.mono`) reserved for labels, tags, and data. Panels carry hairline borders + corner
+ticks; a faint emerald radial + grid sits behind everything. Tokens live on `.site`: `--bg/--bg-2`,
+`--panel/--panel-2`, ink ramp (`--ink/--ink-2/--mut/--faint`), `--line/--line-2`, `--grn/--grn-2/--grn-dim/
+--on-grn`. **Never hardcode colors in components** — reference `var(--token)`. All CSS lives in
+`src/index.css` (Tailwind v4 CSS-first `@import "tailwindcss"`, no config file); component/layout classes
+are hand-written there, not Tailwind utilities.
 
-**Styling**: Tailwind CSS v4 (CSS-first — `@import "tailwindcss"` at top of `index.css`, no `tailwind.config.js`). Design tokens and component/layout classes live in `index.css`, not Tailwind utilities. Key classes: layout — `.container` (max 940px), `.page` (`flex:1` so short pages pin the footer to the bottom), `.kicker`, `.lede`, `.slabel` (`.n` + `h2`), `.page-head`; links/buttons — `.tlink` (underline text link), `.btn` + `.btn-solid` / `.btn-outline`; content — `.timeline` + `.exp-row` (`.current` marks ongoing; Experience uses two side-by-side columns via `.exp-cols`), `.proj-grid` + `.proj-card` (`.pbtn-code` outline / `.pbtn-live` filled actions), `.langbar` + `.langbar-legend`, `.logo-grid` + `.logo-tile` + `.dots` (proficiency) + `.drow`, `.article-grid` + `.article-card`, `.ov-grid` + `.ov-panel` (About overview, `align-items:stretch` for equal heights); plus `.reveal`/`.reveal.in`, `.halo` (cross-page highlight), `.mono`, `.italic-em`, `.sk` (skeleton). Per-page responsive tweaks live in scoped `<style>` blocks inside the page components. A `prefers-reduced-motion` block neutralizes animation (and gives `.halo` a static ring).
+## Content to edit
 
-**Color system**: All colors are theme-aware CSS variables — never hardcode hex in components. Tokens: `--bg`, `--panel` / `--panel-2`, ink ramp (`--ink`, `--ink-2`, `--mut`, `--faint`), `--line` / `--line-soft`, `--accent` / `--accent-2` / `--on-accent`, `--display` (font), and `--lang-*` (validated language chart colors). Same accent hex in both modes; the surfaces/inks flip.
+- **Experience** (`src/data/experience.js`): `EXPERIENCE` items — `type` (`'work'`|`'club'`), `start`
+  (`YYYY-MM`, sort key), `current`, `role`, `org`, `period`, `desc`. `LINKEDIN` is where rows link.
+- **Projects** (`src/data/projects.js`): `curateRepos(repos)` — only repos with a live site (`hasLiveSite`,
+  non-empty GitHub `homepage`) ever show. `VISIBLE` (allowlist/order), `HIDDEN`, `OVERRIDES`
+  (`{title, description, tags, featured, hidden}`). `LENS_WEIGHTS`/`lensFor` are an unused leftover helper.
+- **Skills** (`src/data/skills.js`): `TOOLS` / `FOCUS` / `STRENGTHS`, each `{ cap, items }`; items have
+  `label`, 1–5 `level`, and tools also a devicon `icon`.
+- **Links** (`src/data/links.js`): `LINKS` (socials + `resume`), `RESUMES` (the SWE/FDE/PM picker list),
+  `prettyName`.
+- **Hero / nav / footer copy** lives in `pages/Home.jsx`, `components/CommandBar.jsx`,
+  `components/SiteFooter.jsx`.
 
-## Content to Edit
+## Parked / legacy (present but not mounted)
 
-**Experience** (`src/data/experience.js`): the `EXPERIENCE` array — each item has `type` (`'work'` | `'club'`), `start` (`YYYY-MM`, for sorting), `current` (ongoing = shows "Current" + sorts above ended roles), `role`, `org`, `period`, `desc`. `LINKEDIN` is where every row links. `Experience.jsx` splits it into two columns (Internships & Work / Clubs & Organizations); within each, ongoing roles rank first, then by `start` descending.
+The current site does **not** use these — they're earlier explorations kept in the tree:
+`sections/*` (the single-page-scroll version), `fx/*` (Cursor, Intro, Magnetic, Marquee, Reveal),
+`sections/HeroLab.jsx` + `three/{HeroCanvas,ConceptCanvas,Safe3D}` + `three/concepts/{Globe,Crystal}`
+(the hero concept lab), `landing/*` (the landing concept lab), `components/{SectionLabel,ThemeToggle}`,
+and `hooks/{useTheme,useSmoothScroll}`. Only `three/ParticleCanvas` + `three/concepts/ParticleFlow` are
+live (used by the boot). Safe to delete when doing cleanup, but verify no import first.
 
-**Projects** (`src/data/projects.js`): edit `VISIBLE` / `HIDDEN` / `OVERRIDES` / `ABOUT_PROJECTS` to curate — see **Projects curation** above.
+Also stale: `index.html` `<title>`/meta/OG still describe an old "Adaptive Portfolio / AI engine" concept;
+`package.json` still lists `swiper` and `@tsparticles/slim` (unused). `fuse.js` is installed, not yet used.
 
-**Skills** (`src/data/skills.js`): `TOOLS` (with devicon `icon`), `FOCUS`, `STRENGTHS` — each item has a `level` (1–5) shown as proficiency dots. Tools render as a logo grid; focus/strengths as dot rows.
+## Deploy flow
 
-**About** (`src/pages/AboutMe.jsx`): hero copy, the `FOCUS` topic line, `CORE_SKILLS` (must match Skills labels for the halo to resolve), and the overview panels (Recent Experience/Projects/Skills/Writing) pulling from the data files + live hooks.
-
-**Deploy flow**: `npm run deploy` is the only deploy command needed — it runs `vite build` first via `predeploy`, then pushes `dist/` to the `gh-pages` branch. The `main` branch holds source; `gh-pages` holds the built output.
+`npm run deploy` builds and pushes `dist/` to `gh-pages`. `main` holds source; `gh-pages` holds the built
+output. The command-deck redesign currently lives on the `feat/3d-overhaul` branch — merge to `main` before
+deploying when it's ready.
